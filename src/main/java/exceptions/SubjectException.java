@@ -1,6 +1,6 @@
 package exceptions;
 
-public class SubjectException extends Exception{
+public class SubjectException extends ModelException{
     private String message;
 
     public SubjectException(String message){

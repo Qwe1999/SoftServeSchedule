@@ -2,7 +2,7 @@ package exceptions;
 
 import model.Teacher;
 
-public class TeacherException extends Exception{
+public class TeacherException extends ModelException{
     private String message;
 
     public TeacherException(String message){

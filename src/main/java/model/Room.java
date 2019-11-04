@@ -1,22 +1,46 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import exceptions.RoomException;
 
-public class Room {
-    private int number;
+import java.util.Objects;
 
-    public Room(int number) {
-        this.number = number;
-    }
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Room {
+    private int id;
+    private String number;
 
     public Room() {
     }
 
-    @Override
-    public String toString() {
-        return "model.Room{" +
-                "numberRoom=" + number +
-                '}';
+    public Room(String number) {
+        this.number = number;
+    }
+
+    public Room(int id, String number) {
+        this.id = id;
+        this.number = number;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) throws RoomException{
+        if(number!= null & !number.isEmpty()) {
+            this.number = number;
+        }
+        else {
+            throw new RoomException("Number is null or empty");
+        }
     }
 
     @Override
@@ -24,21 +48,20 @@ public class Room {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Room room = (Room) o;
-        return number == room.number;
+        return id == room.id &&
+                number == room.number;
     }
 
-
-
-    public int getNumber() {
-        return number;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, number);
     }
 
-    public void setNumber(int number) throws RoomException{
-        if(number >=0) {
-            this.number = number;
-        }
-        else {
-            throw new RoomException("number  < 0 ");
-        }
+    @Override
+    public String toString() {
+        return "Room{" +
+                "id=" + id +
+                ", number=" + number +
+                '}';
     }
 }

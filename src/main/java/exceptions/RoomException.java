@@ -1,6 +1,6 @@
 package exceptions;
 
-public class RoomException extends Exception{
+public class RoomException extends ModelException{
 
     private String message;
 

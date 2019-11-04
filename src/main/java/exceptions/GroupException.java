@@ -1,6 +1,6 @@
 package exceptions;
 
-public class GroupException extends Exception{
+public class GroupException extends ModelException{
 
     private String message;
 

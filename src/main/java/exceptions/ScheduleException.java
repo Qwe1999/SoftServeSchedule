@@ -1,6 +1,6 @@
 package exceptions;
 
-public class ScheduleException extends Exception{
+public class ScheduleException extends ModelException{
     private String message;
 
     public ScheduleException(String message){

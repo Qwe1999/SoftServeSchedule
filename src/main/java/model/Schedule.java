@@ -1,7 +1,11 @@
 package model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Schedule {
+    private int id;
     private NumberLesson numberLesson;
     private Group group;
     private Day day;
@@ -9,7 +13,16 @@ public class Schedule {
     private Teacher teacher;
     private Subject subject;
 
+
     public Schedule() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Group getGroup() {
@@ -65,7 +78,8 @@ public class Schedule {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Schedule schedule = (Schedule) o;
-        return numberLesson == schedule.numberLesson &&
+        return id == schedule.id &&
+                numberLesson == schedule.numberLesson &&
                 Objects.equals(group, schedule.group) &&
                 day == schedule.day &&
                 Objects.equals(room, schedule.room) &&
@@ -73,13 +87,18 @@ public class Schedule {
                 Objects.equals(subject, schedule.subject);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, numberLesson, group, day, room, teacher, subject);
+    }
 
     @Override
     public String toString() {
-        return "model.Schedule{" +
-                "numberLesson=" + numberLesson +
+        return "Schedule{" +
+                "id=" + id +
+                ", numberLesson=" + numberLesson +
                 ", group=" + group +
-                ", day='" + day + '\'' +
+                ", day=" + day +
                 ", room=" + room +
                 ", teacher=" + teacher +
                 ", subject=" + subject +

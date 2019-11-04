@@ -2,7 +2,7 @@
   {
     "numberLesson" : 6,
     "group" : {
-      "numberGroup" : 223
+      "number" : "232"
     },
 
     "day" : "Monday",
@@ -24,7 +24,7 @@
   {
     "numberLesson": 3,
     "group": {
-      "numberGroup": 224
+      "number": "111"
     },
     "day": "Monday",
     "room": {

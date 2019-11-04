@@ -1,36 +1,33 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import exceptions.TeacherException;
+
 
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Teacher {
+    private int id;
     private String firstName;
     private String lastName;
+
+
+
+    public Teacher() {
+    }
 
     public Teacher(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public Teacher() {
+    public int getId() {
+        return id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if(this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Teacher teacher = (Teacher) o;
-        return Objects.equals(firstName, teacher.firstName) &&
-                Objects.equals(lastName, teacher.lastName);
-    }
-
-    @Override
-    public String toString() {
-        return "model.Teacher{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -59,4 +56,28 @@ public class Teacher {
         }
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Teacher teacher = (Teacher) o;
+        return id == teacher.id &&
+                Objects.equals(firstName, teacher.firstName) &&
+                Objects.equals(lastName, teacher.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName);
+    }
+
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }
