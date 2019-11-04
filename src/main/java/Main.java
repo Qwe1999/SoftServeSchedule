@@ -79,7 +79,11 @@ public class Main {
 
             }
 
-
+            GroupDAOProxy groupDAOProxy = new GroupDAOProxy();
+            groupDAOProxy.setConnection(connection);
+            int id = groupDAOProxy.insert(new Group("333"));
+            System.out.println(id);
+            System.out.println(groupDAOProxy.selectById(3));
 
 
 

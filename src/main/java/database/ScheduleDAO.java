@@ -21,7 +21,10 @@ public class ScheduleDAO implements JdbcDAO<Schedule>{
             " NumberLesson INTEGER, " +
             " DayLesson CHARACTER  VARYING(20), " +
             " ClassId INTEGER, " +
-            " RoomId INTEGER, " +
+            " RoomId INTEGER," +
+            "UNIQUE(ClassId, NumberLesson,DayLesson), " +
+            "UNIQUE(RoomId, NumberLesson,DayLesson), " +
+            "UNIQUE(TeacherId, NumberLesson,DayLesson) " +
             "FOREIGN KEY (TeacherId) REFERENCES teacher(Id)," +
             "FOREIGN KEY (SubjectId) REFERENCES subject(Id)," +
             "FOREIGN KEY (ClassId) REFERENCES class (Id)," +
@@ -32,7 +35,7 @@ public class ScheduleDAO implements JdbcDAO<Schedule>{
             "VALUES (?,?,?,?,?,?) RETURNING id";
     private static final String SELECT_BY_NUMBER_DAY = "SELECT * FROM schedule WHERE number = ? AND day = ? ";
     private static final String SELECT_BY_ID = "SELECT * FROM schedule WHERE Id = ? ";
-    private static final String SELECT_ALL = "SELECT * FROM NUMBER WHERE Id == ?";
+    private static final String SELECT_ALL = "SELECT * FROM NUMBER WHERE Id = ?";
     private static final String DELETE_BY_ID = "DELETE FROM SCHEDULE WHERE id = ? ";
     private static final String DROP_TABLE = "DROP TABLE SCHEDULE";
 

@@ -14,9 +14,10 @@ public class GroupDAO implements JdbcDAO<Group> {
     Connection connection;
 
     private final String INSERT = "INSERT INTO class(number) VALUES (?) RETURNING id";
-    private final String CREATE_TABLE = "CREATE TABLE class(Id SERIAL  PRIMARY KEY,Number CHARACTER VARYING(30) );";
-    private final String SELECT_BY_NUMBER = "SELECT * FROM CLASS WHERE Number == ?";
-    private final String SELECT_BY_ID = "SELECT * FROM CLASS WHERE Id == ?";
+    private final String CREATE_TABLE = "CREATE TABLE class(Id SERIAL  PRIMARY KEY," +
+            "                            Number CHARACTER VARYING(30) UNIQUE);";
+    private final String SELECT_BY_NUMBER = "SELECT * FROM CLASS WHERE Number = ?";
+    private final String SELECT_BY_ID = "SELECT * FROM CLASS WHERE Id = ?";
     private final String SELECT_ALL= "SELECT * FROM CLASS ";
     private final String DELETE_BY_ID = "DELETE FROM GROUP WHERE id = ? ";
     private final String DROP_TABLE = "DROP TABLE CLASS ";

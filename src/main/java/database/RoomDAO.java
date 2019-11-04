@@ -11,10 +11,11 @@ public class RoomDAO implements JdbcDAO<Room>{
 
     private Connection connection;
 
-    private static final String CREATE_TABLE = "CREATE TABLE room(Id SERIAL PRIMARY KEY,Number CHARACTER VARYING(20));";
+    private static final String CREATE_TABLE = "CREATE TABLE room(Id SERIAL PRIMARY KEY," +
+            "                               Number CHARACTER VARYING(20) UNIQUE);";
     private static final String INSERT = "INSERT INTO room(number) VALUES (?) RETURNING id";
-    private static final String SELECT_BY_NUMBER = "SELECdsT * FROM CLASS WHERE Number == ?";
-    private static final String SELECT_BY_ID = "SELECT * FROM NUMBER WHERE Id == ?";
+    private static final String SELECT_BY_NUMBER = "SELECdsT * FROM CLASS WHERE Number = ?";
+    private static final String SELECT_BY_ID = "SELECT * FROM NUMBER WHERE Id = ?";
     private static final String SELECT_ALL = "SELECT * FROM ROOM";
     private static final String DELETE_BY_ID = "DELETE FROM ROOM WHERE id = ?";
     private static final String DROP_TABLE = "DROP TABLE ROOM";
