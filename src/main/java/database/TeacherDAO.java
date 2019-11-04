@@ -75,7 +75,7 @@ public class TeacherDAO implements JdbcDAO<Teacher>{
         }
     }
 
-    public List<Teacher> selectByName(String firstName, String lastName) throws SQLException,  TeacherException {
+    public Teacher selectByName(String firstName, String lastName) throws SQLException,  TeacherException {
 
         try(PreparedStatement statement = connection
                 .prepareStatement(SELECT_BY_NAME)) {
@@ -84,7 +84,7 @@ public class TeacherDAO implements JdbcDAO<Teacher>{
             statement.setString(2, lastName);
 
             ResultSet rs = statement.executeQuery();
-            return parseResultSet(rs);
+            return parseResultSet(rs).get(0);
         }
     }
 

@@ -63,19 +63,48 @@ public class Main {
 
                 int id;
 
-                id = groupDAO.insert(schedule.getGroup());
+                try {
+                    id = groupDAO.insert(schedule.getGroup());
+                }
+                catch (SQLException e){
+                    id = groupDAO.selectByNumber(
+                            schedule.getGroup().getNumber() ).getId();
+                }
+
                 schedule.getGroup().setId(id);
 
-                id = roomDAO.insert(schedule.getRoom());
+                try {
+                    id = roomDAO.insert(schedule.getRoom());
+                }
+                catch (SQLException e){
+                    id = roomDAO.selectByNumber(
+                            schedule.getRoom().getNumber()).getId();
+                }
                 schedule.getRoom().setId(id);
 
-                id = subjectDAO.insert(schedule.getSubject());
+                try {
+                    id = subjectDAO.insert(schedule.getSubject());
+                }
+                catch (SQLException e){
+                    id = subjectDAO.selectByName(
+                            schedule.getSubject().getName()).getId();
+                }
+
                 schedule.getSubject().setId(id);
 
-                id = teacherDAO.insert(schedule.getTeacher());
+                try {
+                    id = teacherDAO.insert(schedule.getTeacher());
+                }
+                catch (SQLException e){
+                    id = teacherDAO.selectByName(schedule.getTeacher().getFirstName(),
+                            schedule.getTeacher().getLastName()).getId();
+                }
                 schedule.getTeacher().setId(id);
 
-                scheduleDAO.insert(schedule);
+                id = scheduleDAO.insert(schedule);
+
+                //scheduleDAO.deleteById(id);
+
 
             }
 

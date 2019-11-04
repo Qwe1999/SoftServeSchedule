@@ -24,7 +24,7 @@ public class ScheduleDAO implements JdbcDAO<Schedule>{
             " RoomId INTEGER," +
             "UNIQUE(ClassId, NumberLesson,DayLesson), " +
             "UNIQUE(RoomId, NumberLesson,DayLesson), " +
-            "UNIQUE(TeacherId, NumberLesson,DayLesson) " +
+            "UNIQUE(TeacherId, NumberLesson,DayLesson), " +
             "FOREIGN KEY (TeacherId) REFERENCES teacher(Id)," +
             "FOREIGN KEY (SubjectId) REFERENCES subject(Id)," +
             "FOREIGN KEY (ClassId) REFERENCES class (Id)," +
@@ -59,10 +59,14 @@ public class ScheduleDAO implements JdbcDAO<Schedule>{
             scheduleLesson.setId(rs.getInt("id"));
             scheduleLesson.setNumberLesson(NumberLesson.values()[rs.getInt("NumberLesson")]);
             scheduleLesson.setDay(Day.valueOf(rs.getString("Day")));
-            scheduleLesson.setGroup(new GroupDAO().setConnection(connection).selectById(rs.getInt("ClassId")));
-            scheduleLesson.setRoom(new RoomDAO().setConnection(connection).selectById(rs.getInt("RoomId")));
-            scheduleLesson.setTeacher(new TeacherDAO().setConnection(connection).selectById(rs.getInt("TeacherId")));
-            scheduleLesson.setSubject(new SubjectDAO().setConnection(connection).selectById(rs.getInt("SubjectId")));
+            scheduleLesson.setGroup(new GroupDAO().setConnection(connection)
+                    .selectById(rs.getInt("ClassId")));
+            scheduleLesson.setRoom(new RoomDAO().setConnection(connection)
+                    .selectById(rs.getInt("RoomId")));
+            scheduleLesson.setTeacher(new TeacherDAO().setConnection(connection)
+                    .selectById(rs.getInt("TeacherId")));
+            scheduleLesson.setSubject(new SubjectDAO().setConnection(connection)
+                    .selectById(rs.getInt("SubjectId")));
             schedule.add(scheduleLesson);
         }
 

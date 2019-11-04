@@ -40,7 +40,7 @@ public class SubjectDAO implements JdbcDAO<Subject> {
         while (rs.next()) {
             Subject subject = new Subject();
             subject.setId(rs.getInt("id"));
-            subject.setName(rs.getString("subject"));
+            subject.setName(rs.getString("name"));
             subjects.add(subject);
         }
         return subjects;
@@ -74,6 +74,7 @@ public class SubjectDAO implements JdbcDAO<Subject> {
             statement.setString(1, name);
 
             ResultSet rs = statement.executeQuery();
+
             return parseResultSet(rs).get(0);
         }
     }
