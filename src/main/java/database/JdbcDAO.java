@@ -7,17 +7,35 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface JdbcDAO <T> {
+public abstract class JdbcDAO <T> {
 
-    List<T> parseResultSet(ResultSet rs) throws SQLException;
+    protected Connection connection;
 
-    int insert(T object) throws SQLException;
+    public JdbcDAO() {
+    }
 
-    T selectById(int id) throws SQLException;
+    public JdbcDAO(Connection connection) {
+        this.connection = connection;
+    }
 
-    List<T> selectAll() throws SQLException;
+    public Connection getConnection() {
+        return connection;
+    }
 
-    void dropTable() throws SQLException;
+    public JdbcDAO<T> setConnection(Connection connection) {
+        this.connection = connection;
+        return this;
+    }
 
-    void deleteById(int id) throws SQLException;
+    abstract List<T> parseResultSet(ResultSet rs) throws SQLException;
+
+    abstract int insert(T object) throws SQLException;
+
+    abstract T selectById(int id) throws SQLException;
+
+    abstract List<T> selectAll() throws SQLException;
+
+    abstract void dropTable() throws SQLException;
+
+    abstract void deleteById(int id) throws SQLException;
 }

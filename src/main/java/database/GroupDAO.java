@@ -9,13 +9,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupDAO implements JdbcDAO<Group> {
+public class GroupDAO extends JdbcDAO<Group> {
 
-    Connection connection;
 
     private final String INSERT = "INSERT INTO class(number) VALUES (?) RETURNING id";
     private final String CREATE_TABLE = "CREATE TABLE class(Id SERIAL  PRIMARY KEY," +
-            "                            Number CHARACTER VARYING(30) UNIQUE);";
+                                        "Number CHARACTER VARYING(30) UNIQUE);";
     private final String SELECT_BY_NUMBER = "SELECT * FROM CLASS WHERE Number = ?";
     private final String SELECT_BY_ID = "SELECT * FROM CLASS WHERE Id = ?";
     private final String SELECT_ALL= "SELECT * FROM CLASS ";
@@ -23,15 +22,6 @@ public class GroupDAO implements JdbcDAO<Group> {
     private final String DROP_TABLE = "DROP TABLE CLASS ";
 
 
-    public Connection getConnection() {
-        return connection;
-    }
-
-
-    public GroupDAO setConnection(Connection connection) {
-        this.connection = connection;
-        return this;
-    }
 
     @Override
     public List<Group> parseResultSet(ResultSet rs) throws SQLException {
@@ -70,7 +60,7 @@ public class GroupDAO implements JdbcDAO<Group> {
         }
     }
 
-    public Group selectByNumber(String  number) throws SQLException,  GroupException {
+    public Group selectByNumber(String  number) throws SQLException {
 
         try(PreparedStatement statement = connection
                 .prepareStatement(SELECT_BY_NUMBER)) {
@@ -82,6 +72,7 @@ public class GroupDAO implements JdbcDAO<Group> {
         }
     }
 
+    @Override
     public Group selectById(int id) throws SQLException,  GroupException {
 
         try(PreparedStatement statement = connection
@@ -103,6 +94,7 @@ public class GroupDAO implements JdbcDAO<Group> {
         }
     }
 
+    @Override
     public void deleteById(int id) throws SQLException {
 
         try(PreparedStatement statement = connection

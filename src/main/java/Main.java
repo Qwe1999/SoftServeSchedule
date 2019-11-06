@@ -5,6 +5,7 @@ import model.*;
 import service.ServiceJson;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ public class Main {
     static  class ServiceJsonThread implements Callable<String> {
 
         @Override
-        public String call() throws Exception {
+        public String call()  {
             try {
                 ServiceJson serviceJson = new ServiceJson();
                 ArrayList<Schedule> schedules =
@@ -39,11 +40,11 @@ public class Main {
 
 
         try (Connection connection = DBConnection.getConnection()){
-            GroupDAO groupDAO = new GroupDAO().setConnection(connection);
-            RoomDAO roomDAO = new RoomDAO().setConnection(connection);
-            SubjectDAO subjectDAO = new SubjectDAO().setConnection(connection);
-            TeacherDAO teacherDAO = new TeacherDAO().setConnection(connection);
-            ScheduleDAO scheduleDAO = new ScheduleDAO().setConnection(connection);
+            GroupDAO groupDAO = (GroupDAO) new GroupDAO().setConnection(connection);
+            RoomDAO roomDAO = (RoomDAO) new RoomDAO().setConnection(connection);
+            SubjectDAO subjectDAO = (SubjectDAO) new SubjectDAO().setConnection(connection);
+            TeacherDAO teacherDAO = (TeacherDAO) new TeacherDAO().setConnection(connection);
+            ScheduleDAO scheduleDAO = (ScheduleDAO) new ScheduleDAO().setConnection(connection);
 
             scheduleDAO.dropTable();
             groupDAO.dropTable();
@@ -88,6 +89,7 @@ public class Main {
                 catch (SQLException e){
                     id = subjectDAO.selectByName(
                             schedule.getSubject().getName()).getId();
+                    e.printStackTrace(System.out);
                 }
 
                 schedule.getSubject().setId(id);
@@ -98,21 +100,16 @@ public class Main {
                 catch (SQLException e){
                     id = teacherDAO.selectByName(schedule.getTeacher().getFirstName(),
                             schedule.getTeacher().getLastName()).getId();
+
                 }
                 schedule.getTeacher().setId(id);
 
                 id = scheduleDAO.insert(schedule);
 
-                //scheduleDAO.deleteById(id);
 
 
             }
 
-            GroupDAOProxy groupDAOProxy = new GroupDAOProxy();
-            groupDAOProxy.setConnection(connection);
-            int id = groupDAOProxy.insert(new Group("333"));
-            System.out.println(id);
-            System.out.println(groupDAOProxy.selectById(3));
 
 
 

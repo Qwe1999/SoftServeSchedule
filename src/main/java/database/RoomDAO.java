@@ -7,9 +7,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomDAO implements JdbcDAO<Room>{
+public class RoomDAO extends JdbcDAO<Room>{
 
-    private Connection connection;
+
 
     private static final String CREATE_TABLE = "CREATE TABLE room(Id SERIAL PRIMARY KEY," +
             "                               Number CHARACTER VARYING(20) UNIQUE);";
@@ -20,15 +20,7 @@ public class RoomDAO implements JdbcDAO<Room>{
     private static final String DELETE_BY_ID = "DELETE FROM ROOM WHERE id = ?";
     private static final String DROP_TABLE = "DROP TABLE ROOM";
 
-    public Connection getConnection() {
-        return connection;
-    }
 
-
-    public RoomDAO setConnection(Connection connection) {
-        this.connection = connection;
-        return this;
-    }
 
     @Override
     public List<Room> parseResultSet(ResultSet rs) throws SQLException {

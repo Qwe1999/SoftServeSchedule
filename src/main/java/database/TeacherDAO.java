@@ -10,9 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeacherDAO implements JdbcDAO<Teacher>{
-
-    private Connection connection;
+public class TeacherDAO extends JdbcDAO<Teacher>{
 
     private final String INSERT = "INSERT INTO teacher(FirstName,LastName) VALUES (?,?) RETURNING id";
     private final String CREATE_TABLE = "CREATE TABLE teacher(Id SERIAL PRIMARY KEY,"+
@@ -25,15 +23,6 @@ public class TeacherDAO implements JdbcDAO<Teacher>{
     private final String DROP_TABLE = "DROP TABLE TEACHER ";
 
 
-    public Connection getConnection() {
-        return connection;
-    }
-
-
-    public TeacherDAO setConnection(Connection connection) {
-        this.connection = connection;
-        return this;
-    }
 
     @Override
     public List<Teacher> parseResultSet(ResultSet rs) throws SQLException {

@@ -10,9 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubjectDAO implements JdbcDAO<Subject> {
+public class SubjectDAO extends JdbcDAO<Subject> {
 
-    private Connection connection;
 
     private final String CREATE_TABLE = "CREATE TABLE subject(Id SERIAL PRIMARY KEY," +
             "                       Name CHARACTER VARYING(30) UNIQUE);";
@@ -23,15 +22,6 @@ public class SubjectDAO implements JdbcDAO<Subject> {
     private final String DELETE_BY_ID = "DELETE SUBJECT WHERE ID = ?";
     private final String DROP_TABLE = "DROP TABLE SUBJECT";
 
-    public Connection getConnection() {
-        return connection;
-    }
-
-
-    public SubjectDAO setConnection(Connection connection) {
-        this.connection = connection;
-        return this;
-    }
 
     @Override
     public List<Subject> parseResultSet(ResultSet rs) throws SQLException {

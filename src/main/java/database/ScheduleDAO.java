@@ -10,9 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScheduleDAO implements JdbcDAO<Schedule>{
+public class ScheduleDAO extends JdbcDAO<Schedule>{
 
-    private Connection connection;
 
     private static final String CREATE_TABLE = "CREATE TABLE schedule" +
             "(Id SERIAL PRIMARY KEY," +
@@ -40,19 +39,9 @@ public class ScheduleDAO implements JdbcDAO<Schedule>{
     private static final String DROP_TABLE = "DROP TABLE SCHEDULE";
 
 
-    public Connection getConnection() {
-        return connection;
-    }
-
-
-    public ScheduleDAO setConnection(Connection connection) {
-        this.connection = connection;
-        return this;
-    }
 
     @Override
     public List<Schedule> parseResultSet(ResultSet rs) throws SQLException {
-
         List<Schedule> schedule = new ArrayList<>();
         while (rs.next()) {
             Schedule scheduleLesson = new Schedule();
