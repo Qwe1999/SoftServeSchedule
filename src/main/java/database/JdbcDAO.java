@@ -1,41 +1,21 @@
 package database;
 
-import model.Group;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
-public abstract class JdbcDAO <T> {
+public interface JdbcDAO <T> {
 
-    protected Connection connection;
 
-    public JdbcDAO() {
-    }
+    public abstract int insert(T object) throws SQLException;
 
-    public JdbcDAO(Connection connection) {
-        this.connection = connection;
-    }
+    public abstract Optional<T> selectById(int id) throws SQLException;
 
-    public Connection getConnection() {
-        return connection;
-    }
+    public abstract Optional<List<T>> selectAll() throws SQLException;
 
-    public JdbcDAO<T> setConnection(Connection connection) {
-        this.connection = connection;
-        return this;
-    }
 
-    abstract List<T> parseResultSet(ResultSet rs) throws SQLException;
 
-    abstract int insert(T object) throws SQLException;
-
-    abstract T selectById(int id) throws SQLException;
-
-    abstract List<T> selectAll() throws SQLException;
-
-    abstract void dropTable() throws SQLException;
-
-    abstract void deleteById(int id) throws SQLException;
+    public abstract void deleteById(int id) throws SQLException;
 }

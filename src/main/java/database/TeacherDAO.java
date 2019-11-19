@@ -9,8 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class TeacherDAO extends JdbcDAO<Teacher>{
+public class TeacherDAO implements JdbcDAO<Teacher>{
 
     private final String INSERT = "INSERT INTO teacher(FirstName,LastName) VALUES (?,?) RETURNING id";
     private final String CREATE_TABLE = "CREATE TABLE teacher(Id SERIAL PRIMARY KEY,"+
@@ -19,12 +20,12 @@ public class TeacherDAO extends JdbcDAO<Teacher>{
     private final String SELECT_BY_NAME = "SELECT * FROM Teacher WHERE FirstName = ? AND LastName = ?";
     private final String SELECT_BY_ID = "SELECT * FROM Teacher WHERE Id = ?";
     private final String SELECT_ALL= "SELECT * FROM TEACHER";
-    private final String DELETE_BY_ID = "DELETE FROM TEACHER WHERE id = ? ";
+    private final String DELETE_BY_NAME = "DELETE FROM TEACHER WHERE firstName = ? and lastName = ?";
+    private final String DELETE_BY_ID = "DELETE FROM TEACHER WHERE id = ?";
     private final String DROP_TABLE = "DROP TABLE TEACHER ";
 
 
 
-    @Override
     public List<Teacher> parseResultSet(ResultSet rs) throws SQLException {
 
         List<Teacher> teachers = new ArrayList<>();
@@ -40,8 +41,8 @@ public class TeacherDAO extends JdbcDAO<Teacher>{
 
     public void create() throws SQLException {
 
-        try(PreparedStatement statement = connection
-                .prepareStatement(CREATE_TABLE)) {
+        try(PreparedStatement statement =
+                    DBConnection.getPreparedStatement(CREATE_TABLE)) {
 
             statement.execute();
         }
@@ -49,8 +50,8 @@ public class TeacherDAO extends JdbcDAO<Teacher>{
 
     public int insert(Teacher teacher) throws SQLException {
 
-        try(PreparedStatement statement = connection
-                .prepareStatement(INSERT)) {
+        try(PreparedStatement statement =
+                    DBConnection.getPreparedStatement(INSERT)) {
 
             statement.setString(1, teacher.getFirstName());
             statement.setString(2, teacher.getLastName());
@@ -64,54 +65,86 @@ public class TeacherDAO extends JdbcDAO<Teacher>{
         }
     }
 
-    public Teacher selectByName(String firstName, String lastName) throws SQLException,  TeacherException {
+    public Optional<Teacher> selectByName(String firstName, String lastName) throws SQLException,  TeacherException {
 
-        try(PreparedStatement statement = connection
-                .prepareStatement(SELECT_BY_NAME)) {
+        try(PreparedStatement statement =
+                    DBConnection.getPreparedStatement(SELECT_BY_NAME)) {
 
             statement.setString(1, firstName);
             statement.setString(2, lastName);
 
             ResultSet rs = statement.executeQuery();
-            return parseResultSet(rs).get(0);
+
+            List<Teacher> teachers = parseResultSet(rs);
+            if (teachers.size() == 0){
+                return Optional.empty();
+            }
+            else {
+                return Optional.of(teachers.get(0));
+            }
         }
     }
 
-    public Teacher selectById(int id) throws SQLException, TeacherException {
+    public Optional<Teacher> selectById(int id) throws SQLException, TeacherException {
 
-        try(PreparedStatement statement = connection
-                .prepareStatement(SELECT_BY_ID)) {
+        try(PreparedStatement statement =
+                    DBConnection.getPreparedStatement(SELECT_BY_ID)) {
             statement.setInt(1, id);
 
             ResultSet rs = statement.executeQuery();
-            return parseResultSet(rs).get(0);
+
+            List<Teacher> teachers = parseResultSet(rs);
+            if (teachers.size() == 0){
+                return Optional.empty();
+            }
+            else {
+                return Optional.of(teachers.get(0));
+            }
         }
     }
 
-    public List<Teacher> selectAll() throws SQLException,  TeacherException {
+    public Optional<List<Teacher>> selectAll() throws SQLException,  TeacherException {
 
-        try(PreparedStatement statement = connection
-                .prepareStatement(SELECT_ALL)) {
+        try(PreparedStatement statement =
+                    DBConnection.getPreparedStatement(SELECT_ALL)) {
 
             ResultSet rs = statement.executeQuery();
-            return parseResultSet(rs);
+
+            List<Teacher> teachers = parseResultSet(rs);
+            if (teachers.size() == 0){
+                return Optional.empty();
+            }
+            else {
+                return Optional.of(teachers);
+            }
         }
     }
 
     public void deleteById(int id) throws SQLException {
 
-        try(PreparedStatement statement = connection
-                .prepareStatement(DELETE_BY_ID)) {
+        try(PreparedStatement statement =
+                    DBConnection.getPreparedStatement(DELETE_BY_ID)) {
 
             statement.setInt(1, id);
             statement.execute();
         }
     }
 
+    public void deleteByName(String firstName, String lastName) throws SQLException {
+
+        try(PreparedStatement statement =
+                    DBConnection.getPreparedStatement(DELETE_BY_NAME)) {
+
+            statement.setString(1, firstName);
+            statement.setString(2, lastName);
+            statement.execute();
+        }
+    }
+
 
     public void dropTable() throws SQLException {
-        try(PreparedStatement statement = connection
-                .prepareStatement(DROP_TABLE)) {
+        try(PreparedStatement statement =
+                    DBConnection.getPreparedStatement(DROP_TABLE)) {
             statement.execute();
         }
     }

@@ -1,30 +1,29 @@
 
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import database.*;
-import exceptions.TeacherException;
 import model.*;
 import service.ServiceJson;
+import service.ServiceLesson;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 public class Main {
 
     static final String PATH_JSON = "src/main/resources/schedule.json";
     static final String PATH_PROPERTIES = "src/main/resources/config.properties";
-    static  class ServiceJsonThread implements Callable<String> {
+    static class ServiceJsonThread implements Callable<String> {
 
         @Override
         public String call()  {
             try {
                 ServiceJson serviceJson = new ServiceJson();
-                ArrayList<Schedule> schedules =
-                        (ArrayList<Schedule>) serviceJson.read(PATH_JSON);
+                ArrayList<Lesson> lessons =
+                        (ArrayList<Lesson>) serviceJson.read(PATH_JSON);
                 return "Successfully";
             } catch (IOException e) {
                 return "Error";
@@ -34,19 +33,20 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
 
-
-        service.ServiceSchedule serviceSchedule = new service.ServiceSchedule();
+        ServiceLesson serviceLesson1 = new ServiceLesson();
         service.ServiceJson serviceJson = new service.ServiceJson();
 
-
         try (Connection connection = DBConnection.getConnection()){
-            GroupDAO groupDAO = (GroupDAO) new GroupDAO().setConnection(connection);
-            RoomDAO roomDAO = (RoomDAO) new RoomDAO().setConnection(connection);
-            SubjectDAO subjectDAO = (SubjectDAO) new SubjectDAO().setConnection(connection);
-            TeacherDAO teacherDAO = (TeacherDAO) new TeacherDAO().setConnection(connection);
-            ScheduleDAO scheduleDAO = (ScheduleDAO) new ScheduleDAO().setConnection(connection);
+            GroupDAO groupDAO = new GroupDAO();
+            RoomDAO roomDAO =  new RoomDAO();
+            SubjectDAO subjectDAO =  new SubjectDAO();
+            TeacherDAO teacherDAO =  new TeacherDAO();
+            LessonDAO lessonDAO =  new LessonDAO();
+            List<String> strings = new ArrayList<>();
 
-            scheduleDAO.dropTable();
+            System.out.println(groupDAO.selectAll());
+
+            /*scheduleDAO.dropTable();
             groupDAO.dropTable();
             roomDAO.dropTable();
             subjectDAO.dropTable();
@@ -59,61 +59,11 @@ public class Main {
             scheduleDAO.create();
 
             ArrayList<Schedule> schedules = (ArrayList<Schedule>) serviceJson.read(PATH_JSON);
-
+            ServiceLesson serviceLesson = new ServiceLesson();
             for (Schedule schedule: schedules){
-
-                int id;
-
-                try {
-                    id = groupDAO.insert(schedule.getGroup());
-                }
-                catch (SQLException e){
-                    id = groupDAO.selectByNumber(
-                            schedule.getGroup().getNumber() ).getId();
-                }
-
-                schedule.getGroup().setId(id);
-
-                try {
-                    id = roomDAO.insert(schedule.getRoom());
-                }
-                catch (SQLException e){
-                    id = roomDAO.selectByNumber(
-                            schedule.getRoom().getNumber()).getId();
-                }
-                schedule.getRoom().setId(id);
-
-                try {
-                    id = subjectDAO.insert(schedule.getSubject());
-                }
-                catch (SQLException e){
-                    id = subjectDAO.selectByName(
-                            schedule.getSubject().getName()).getId();
-                    e.printStackTrace(System.out);
-                }
-
-                schedule.getSubject().setId(id);
-
-                try {
-                    id = teacherDAO.insert(schedule.getTeacher());
-                }
-                catch (SQLException e){
-                    id = teacherDAO.selectByName(schedule.getTeacher().getFirstName(),
-                            schedule.getTeacher().getLastName()).getId();
-
-                }
-                schedule.getTeacher().setId(id);
-
-                id = scheduleDAO.insert(schedule);
-
-
-
+                serviceLesson.insertLesson(schedule);
             }
-
-
-
-
-
+            System.out.println(serviceLesson.selectByDay(Day.Monday));*/
         }
         catch (Exception e){
             e.printStackTrace();

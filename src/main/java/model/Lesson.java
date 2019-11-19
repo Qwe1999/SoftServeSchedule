@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Schedule {
+public class Lesson {
     private int id;
     private NumberLesson numberLesson;
     private Group group;
-    private Day day;
+    private Day dayLesson;
     private Room room;
     private Teacher teacher;
     private Subject subject;
 
 
-    public Schedule() {
+    public Lesson() {
     }
 
     public int getId() {
@@ -62,34 +62,34 @@ public class Schedule {
     }
 
     public void setNumberLesson(NumberLesson numberLesson) {
-            this.numberLesson = numberLesson;
+            this.numberLesson =numberLesson;
     }
 
-    public Day getDay() {
-        return day;
+    public Day getDayLesson() {
+        return dayLesson;
     }
 
-    public void setDay(Day day) {
-            this.day = day;
+    public void setDayLesson(Day dayLesson) {
+            this.dayLesson = dayLesson;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Schedule schedule = (Schedule) o;
-        return id == schedule.id &&
-                numberLesson == schedule.numberLesson &&
-                Objects.equals(group, schedule.group) &&
-                day == schedule.day &&
-                Objects.equals(room, schedule.room) &&
-                Objects.equals(teacher, schedule.teacher) &&
-                Objects.equals(subject, schedule.subject);
+        Lesson lesson = (Lesson) o;
+        return id == lesson.id &&
+                numberLesson == lesson.numberLesson &&
+                Objects.equals(group, lesson.group) &&
+                dayLesson == lesson.dayLesson &&
+                Objects.equals(room, lesson.room) &&
+                Objects.equals(teacher, lesson.teacher) &&
+                Objects.equals(subject, lesson.subject);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, numberLesson, group, day, room, teacher, subject);
+        return Objects.hash(id, numberLesson, group, dayLesson, room, teacher, subject);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class Schedule {
                 "id=" + id +
                 ", numberLesson=" + numberLesson +
                 ", group=" + group +
-                ", day=" + day +
+                ", day=" + dayLesson +
                 ", room=" + room +
                 ", teacher=" + teacher +
                 ", subject=" + subject +

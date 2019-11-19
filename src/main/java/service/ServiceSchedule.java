@@ -1,91 +1,187 @@
 package service;
 
-import exceptions.ScheduleServiceException;
-import model.Day;
-import model.Group;
-import model.Schedule;
-import model.Teacher;
+import database.*;
+import model.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.SQLException;
+import java.util.*;
 
 public class ServiceSchedule {
-    private List<Schedule> schedules = new ArrayList<>();
+
+    GroupDAO groupDAO;
+    RoomDAO roomDAO;
+    SubjectDAO subjectDAO;
+    TeacherDAO teacherDAO;
+    LessonDAO lessonDAO;
 
     public ServiceSchedule() {
+
+        groupDAO = new GroupDAO();
+        roomDAO = new RoomDAO();
+        subjectDAO = new SubjectDAO();
+        teacherDAO = new TeacherDAO();
+        lessonDAO = new LessonDAO();
     }
 
 
-    public void addLesson(Schedule scheduleLesson) throws ScheduleServiceException {
+    public void createTables() throws SQLException {
+        groupDAO.create();
+        roomDAO.create();
+        subjectDAO.create();
+        teacherDAO.create();
+        lessonDAO.create();
+    }
 
-        for (Schedule i : schedules) {
-            if (scheduleLesson.getDay().equals(i.getDay()) &&
-                    scheduleLesson.getNumberLesson().equals(i.getNumberLesson())) {
+    public void dropTables() throws SQLException {
+        lessonDAO.dropTable();
+        groupDAO.dropTable();
+        roomDAO.dropTable();
+        subjectDAO.dropTable();
+        teacherDAO.dropTable();
+    }
 
-                if(scheduleLesson.getGroup().equals(i.getGroup())){
-                    throw  new ScheduleServiceException("Group is busy");
-                }
-                if(scheduleLesson.getTeacher().equals(i.getTeacher())){
-                    throw  new ScheduleServiceException("Teacher is busy");
-                }
-                if(scheduleLesson.getRoom().equals(i.getRoom())){
-                    throw  new ScheduleServiceException("Room is busy");
-                }
-            }
+    public List<Lesson> selectByNumberGroup(String numberGroup)
+            throws SQLException {
+
+        Optional<List<Lesson>> lessons =
+                lessonDAO.selectByNumberGroup(numberGroup);
+        if(lessons.isPresent()){
+            return lessons.get();
         }
-
-        schedules.add(scheduleLesson);
+        return new ArrayList<>();
     }
 
-    public List<Schedule> getByGroup(Group group) {
-        List<Schedule> array = new ArrayList<>();
+    public void deleteGroup(String number) throws SQLException {
+        groupDAO.deleteByNumber(number);
+    }
 
-        for (Schedule i : schedules) {
-            if (i.getGroup().equals(group)) {
-                array.add(i);
-            }
+    public void deleteSubject(String name) throws SQLException {
+        subjectDAO.deleteByName(name);
+    }
+
+    public void deleteRoom(String number) throws SQLException {
+        roomDAO.deleteByNumber(number);
+    }
+
+    public void deleteTeacher(String firstName,String lastName) throws SQLException {
+        teacherDAO.deleteByName(firstName,lastName);
+    }
+
+    public void deleteLesson(int id) throws SQLException {
+        lessonDAO.deleteById(id);
+    }
+
+    public void insertLesson(Lesson lesson) throws SQLException {
+        int id ;
+
+        Optional<Group> optionalGroup = groupDAO
+                .selectByNumber(lesson.getGroup().getNumber());
+
+        id = optionalGroup.isPresent() ?  optionalGroup.get().getId() :
+                  groupDAO.insert(lesson.getGroup());
+        lesson.getGroup().setId(id);
+
+        Optional<Subject> optionalSubject = subjectDAO
+                .selectByName(lesson.getSubject().getName());
+
+        id = optionalSubject.isPresent() ?  optionalSubject.get().getId() :
+                subjectDAO.insert(lesson.getSubject());
+        lesson.getSubject().setId(id);
+
+        Optional<Room> optionalRoom = roomDAO
+                .selectByNumber(lesson.getRoom().getNumber());
+
+        id = optionalRoom.isPresent() ? optionalRoom.get().getId() :
+                roomDAO.insert(lesson.getRoom());
+        lesson.getRoom().setId(id);
+
+
+        Optional<Teacher> optionalTeacher = teacherDAO
+                .selectByName(lesson.getTeacher().getFirstName(),
+                 lesson.getTeacher().getLastName());
+
+        id = optionalTeacher.isPresent() ? optionalTeacher.get().getId() :
+                teacherDAO.insert(lesson.getTeacher());
+        lesson.getTeacher().setId(id);
+
+        lessonDAO.insert(lesson);
+    }
+
+    public void insertGroup(Group group) throws SQLException {
+        groupDAO.insert(group);
+    }
+
+    public void insertTeacher(Teacher teacher) throws SQLException {
+        teacherDAO.insert(teacher);
+    }
+
+    public void insertSubject(Subject subject) throws SQLException {
+        subjectDAO.insert(subject);
+    }
+
+    public void insertRoom(Room room) throws SQLException {
+        roomDAO.insert(room);
+    }
+
+    public List<Lesson> selectByTeacherName(String firstName, String lastName)
+            throws SQLException {
+       Optional<List<Lesson>> lessons =
+               lessonDAO.selectByTeacherName(firstName,lastName);
+       if(lessons.isPresent()){
+           return lessons.get();
+       }
+        return new ArrayList<>();
+    }
+
+    public List<Lesson> selectBySubject(String name)
+            throws SQLException {
+        Optional<List<Lesson>> lessons =
+                lessonDAO.selectByNameSubject(name);
+        if(lessons.isPresent()){
+            return lessons.get();
         }
-        return array;
+        return new ArrayList<>();
     }
 
-    public List<Schedule> getByDay(Day day) {
-        List<Schedule> array = new ArrayList<>();
-
-        for (Schedule i : schedules) {
-            if (i.getDay().equals(day)) {
-                array.add(i);
-            }
+    public List<Lesson> selectByRoom(String number)
+            throws SQLException {
+        Optional<List<Lesson>> lessons =
+                lessonDAO.selectByNameRoom(number);
+        if(lessons.isPresent()){
+            return lessons.get();
         }
-        return array;
+        return new ArrayList<>();
     }
 
-    public List<Schedule> getByTeacher(Teacher teacher) {
-        List<Schedule> array = new ArrayList<>();
-
-        for (Schedule i : schedules) {
-            if (i.getTeacher().equals(teacher)) {
-                array.add(i);
-            }
+    public List<Lesson> selectAll() throws SQLException {
+        Optional<List<Lesson>> lessons =
+                lessonDAO.selectAll();
+        if(lessons.isPresent()){
+            return lessons.get();
         }
-        return array;
+        return new ArrayList<>();
     }
 
-    public List<Schedule> getByDayGroup(Day day, Group group) {
-        List<Schedule> array = new ArrayList<>();
-
-        for (Schedule i : schedules) {
-            if (i.getDay().equals(day) && i.getGroup().equals(group)) {
-                array.add(i);
-            }
+    public List<Group> selectAllGroup() throws SQLException {
+        Optional<List<Group>> groups =
+                groupDAO.selectAll();
+        if(groups.isPresent()){
+            return groups.get();
         }
-        return array;
+        return new ArrayList<>();
     }
 
-    public List<Schedule> getSchedule() {
-        return schedules;
-    }
 
-    public void setSchedules(List<Schedule> schedules) {
-        this.schedules = schedules;
+    public Map<NumberLesson,Map<Day,Lesson>> getMapSchedule
+            (List<Lesson> lessons){
+
+        Map<NumberLesson, Map<Day, Lesson>> schedule =
+                new EnumMap<>(NumberLesson.class);
+            for (Lesson lesson : lessons) {
+                Map<Day, Lesson> scheduleValue = new EnumMap<Day, Lesson>(Day.class);
+                scheduleValue.put(lesson.getDayLesson(), lesson);
+                schedule.put(lesson.getNumberLesson(), scheduleValue);
+            }
+            return schedule;
     }
 }

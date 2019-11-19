@@ -1,0 +1,34 @@
+.header {
+    padding: 40px;
+    text-align: center;
+    background: cadetblue;
+    color: white;
+    font-size: 30px;
+}
+.body {
+    height: 100%;
+    width: 50%;
+    background: ghostwhite;
+    margin: auto;
+}
+dl{
+    padding-top: 100px;
+    grid-template-columns: minmax(min-content, 1fr) auto;
+}
+dd{
+    width: 100%;
+    padding-left: 50px;
+    border-bottom: 1px solid rgba(0,0,0,.12);
+    margin-bottom: 20px;
+}
+dt{
+    text-align: center;
+    padding-bottom: 30px;
+}
+dd button{
+    float: right;
+    margin-right: 10px;
+}
+dd input {
+    margin-left: 10px;
+}

@@ -1,0 +1,58 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: admin
+  Date: 19.11.2019
+  Time: 17:04
+  To change this template use File | Settings | File Templates.
+--%>
+<html>
+
+<head>
+    <title>$Title$</title>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<h2>Schedule</h2>
+<c:forEach items="${groups}" var="group">
+    <p>Group - ${group.number}</p>
+    <table class="table table-condensed table-striped table-bordered">
+        <caption>Group - ${groupNumber}</caption>
+        <thead>
+        <td>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        </td>
+        </thead>
+        <tbody>
+        <c:forEach items="${numbers}" var="numberLesson">
+            <tr>
+                <td id="tdNumber" width="10">${numberLesson.number}</td>
+                <c:forEach items="${days}" var="dayLesson">
+                    <c:if test="${schedule[numberLesson][dayLesson] != null and
+                        schedule[numberLesson][dayLessin].group.number == group.number}">
+                        <td>
+                            <p>Subject - ${schedule[numberLesson][dayLesson].subject.name}</p>
+                            <p>
+                                Teacher - ${schedule[numberLesson][dayLesson].teacher.firstName}
+                                    ${schedule[numberLesson][dayLesson].teacher.lastName}
+                            </p>
+                            <p>Room - ${schedule[numberLesson][dayLesson].room.number}</p>
+                        </td>
+                    </c:if>
+                    <c:if test="${schedule[numberLesson][dayLesson] == null}">
+                        <td></td>
+                    </c:if>
+                </c:forEach>
+            </tr>
+        </c:forEach>
+
+        </tbody>
+    </table>
+</c:forEach>
+</body>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+</html>

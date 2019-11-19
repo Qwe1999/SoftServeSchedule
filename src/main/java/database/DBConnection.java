@@ -1,28 +1,51 @@
 package database;
 
-import exceptions.TeacherException;
-import model.Teacher;
+import org.apache.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.List;
+import java.sql.*;
 import java.util.Properties;
 
-public class DBConnection  {
-    static Connection connection ;
+public class DBConnection {
+    private static final Logger log = Logger.getLogger(DBConnection.class);
+    private static Connection connection;
 
-    static final String HOST = "jdbc:postgresql://localhost/schedule?user=postgres&password=1234&useUnicode=yes";
+
+    private DBConnection() {
+    }
 
     public static Connection getConnection() throws SQLException {
-        connection = DriverManager.getConnection(HOST);
+//        try (FileInputStream fis =
+//                     new FileInputStream("src/main/resources/config.properties")) {
+//            Properties property = new Properties();
+//            property.load(fis);
+//            log.info("Call get connection");
+//            connection = DriverManager.getConnection(property.getProperty("db.url"));
+//            log.info("Got connection");
+//            return connection;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//   return null;
+        connection = DriverManager.getConnection(
+                "jdbc:postgresql://localhost/schedule?user=postgres&password=root");
         return connection;
     }
 
     public static void closeConnection() throws SQLException {
+        log.info("Call close connection");
         connection.close();
+        log.info("Closed connection");
+    }
+
+    public static PreparedStatement getPreparedStatement(String sql) throws SQLException {
+        log.info("Call get prepareStatement");
+        if (connection == null) {
+            connection = getConnection();
+        }
+        return connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS,
+                Statement.KEEP_CURRENT_RESULT);
     }
 
 
