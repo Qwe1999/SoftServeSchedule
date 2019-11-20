@@ -48,7 +48,8 @@ public class ServletLessons extends HttpServlet {
                 Map<NumberLesson, Map<Day,Lesson>> schedule;
                 schedule = serviceSchedule.getMapSchedule(lessons);
                 List<Group> groups = serviceSchedule.selectAllGroup();
-
+                System.out.println(groups);
+                System.out.println(schedule.values());
                 request.setAttribute("groups",groups);
                 request.setAttribute("schedule", schedule);
                 request.setAttribute("numbers", NumberLesson.values());
@@ -73,13 +74,17 @@ public class ServletLessons extends HttpServlet {
         try {
             ServiceSchedule serviceSchedule = new ServiceSchedule() ;
 
-            Group group = new Group(request.getParameter(GROUP_NUMBER_PARAM));
-            Subject subject = new Subject(request.getParameter(SUBJECT_NAME_PARAM));
-            Room room = new Room(request.getParameter(ROOM_NUMBER_PARAM));
+            Group group = new Group(request.getParameter(GROUP_NUMBER_PARAM).toLowerCase());
+            Subject subject = new Subject(request.getParameter(SUBJECT_NAME_PARAM).toLowerCase());
+            Room room = new Room(request.getParameter(ROOM_NUMBER_PARAM).toLowerCase());
+
             Teacher teacher = new Teacher();
-            teacher.setFirstName(request.getParameter(TEACHER_FIRST_NAME_PARAM));
-            teacher.setLastName(request.getParameter(TEACHER_LAST_NAME_PARAM));
-            Day day = Day.valueOf(request.getParameter(DAY_PARAM));
+            teacher.setFirstName(request.getParameter(TEACHER_FIRST_NAME_PARAM).toLowerCase());
+            teacher.setLastName(request.getParameter(TEACHER_LAST_NAME_PARAM).toLowerCase());
+            String dayStr = request.getParameter(DAY_PARAM);
+
+            dayStr = dayStr.substring(0,1).toUpperCase() + dayStr.substring(1).toLowerCase();
+            Day day = Day.valueOf(dayStr);
             NumberLesson numberLesson =
                     NumberLesson.getNumberLesson(
                             Integer.parseInt(request.getParameter(NUMBER_LESSON_PARAM)));

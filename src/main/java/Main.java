@@ -43,8 +43,7 @@ public class Main {
             TeacherDAO teacherDAO =  new TeacherDAO();
             LessonDAO lessonDAO =  new LessonDAO();
             List<String> strings = new ArrayList<>();
-
-            System.out.println(groupDAO.selectAll());
+            System.out.println(Day.valueOf("Monday"));
 
             /*scheduleDAO.dropTable();
             groupDAO.dropTable();

@@ -146,7 +146,7 @@ public class ServiceSchedule {
     public List<Lesson> selectByRoom(String number)
             throws SQLException {
         Optional<List<Lesson>> lessons =
-                lessonDAO.selectByNameRoom(number);
+                lessonDAO.selectByNumberRoom(number);
         if(lessons.isPresent()){
             return lessons.get();
         }

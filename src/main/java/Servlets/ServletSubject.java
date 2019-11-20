@@ -31,7 +31,7 @@ public class ServletSubject extends HttpServlet {
         ServiceSchedule serviceSchedule = new ServiceSchedule();
 
         String forward;
-        String subjectName = (String) request.getParameter(SUBJECT_NAME_PARAMETER);
+        String subjectName = request.getParameter(SUBJECT_NAME_PARAMETER).toLowerCase();
         try {
             List<Lesson> lessons = serviceSchedule.selectBySubject(subjectName);
 

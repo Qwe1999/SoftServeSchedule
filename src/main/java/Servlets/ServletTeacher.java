@@ -32,8 +32,8 @@ public class ServletTeacher extends HttpServlet {
         ServiceSchedule serviceSchedule = new ServiceSchedule();
 
         String forward;
-        String firstName = request.getParameter(FIRST_NAME_PARAMETER);
-        String lastName =request.getParameter(LAST_NAME_PARAMETER);
+        String firstName = request.getParameter(FIRST_NAME_PARAMETER).toLowerCase();
+        String lastName =request.getParameter(LAST_NAME_PARAMETER).toLowerCase();
         System.out.println(firstName);
         System.out.println(lastName);
         try {

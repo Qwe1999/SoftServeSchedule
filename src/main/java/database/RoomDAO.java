@@ -13,7 +13,7 @@ public class RoomDAO implements JdbcDAO<Room>{
 
 
     private static final String CREATE_TABLE = "CREATE TABLE room(Id SERIAL PRIMARY KEY," +
-            "                               Number CHARACTER VARYING(20) UNIQUE);";
+            "                               Number CHARACTER VARYING(20) NOT NULL UNIQUE);";
     private static final String INSERT = "INSERT INTO room(number) VALUES (?) RETURNING id";
     private static final String SELECT_BY_NUMBER = "SELECT * FROM CLASS WHERE Number = ?";
     private static final String SELECT_BY_ID = "SELECT * FROM NUMBER WHERE Id = ?";
@@ -54,7 +54,6 @@ public class RoomDAO implements JdbcDAO<Room>{
             rs.next();
             int id;
             id = rs.getInt(1);
-            statement.close();
             return id;
         }
 

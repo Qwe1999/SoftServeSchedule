@@ -16,7 +16,7 @@ public class SubjectDAO implements JdbcDAO<Subject> {
 
 
     private final String CREATE_TABLE = "CREATE TABLE subject(Id SERIAL PRIMARY KEY," +
-            "                       Name CHARACTER VARYING(30) UNIQUE);";
+            "                       Name CHARACTER VARYING(30) NOT NULL UNIQUE);";
     private final String INSERT = "INSERT INTO SUBJECT(Name) VALUES (?) RETURNING id";
     private final String SELECT_BY_NAME = "SELECT * FROM SUBJECT WHERE Name = ?";
     private final String SELECT_BY_ID = "SELECT * FROM SUBJECT WHERE Id =?";

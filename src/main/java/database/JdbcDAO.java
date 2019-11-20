@@ -9,13 +9,11 @@ import java.util.Optional;
 public interface JdbcDAO <T> {
 
 
-    public abstract int insert(T object) throws SQLException;
+    int insert(T object) throws SQLException;
 
-    public abstract Optional<T> selectById(int id) throws SQLException;
+    Optional<T> selectById(int id) throws SQLException;
 
-    public abstract Optional<List<T>> selectAll() throws SQLException;
+    Optional<List<T>> selectAll() throws SQLException;
 
-
-
-    public abstract void deleteById(int id) throws SQLException;
+    void deleteById(int id) throws SQLException;
 }

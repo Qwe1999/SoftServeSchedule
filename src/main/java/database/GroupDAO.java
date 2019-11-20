@@ -14,7 +14,7 @@ public class GroupDAO implements JdbcDAO<Group>{
     private static final Logger log = Logger.getLogger(GroupDAO.class);
     private final String INSERT = "INSERT INTO class(number) VALUES (?) RETURNING id";
     private final String CREATE_TABLE = "CREATE TABLE class(Id SERIAL  PRIMARY KEY," +
-                                        "Number CHARACTER VARYING(30) UNIQUE);";
+                                        "Number CHARACTER VARYING(30) NOT NULL UNIQUE);";
     private final String SELECT_BY_NUMBER = "SELECT * FROM CLASS WHERE Number = ?";
     private final String SELECT_BY_ID = "SELECT * FROM CLASS WHERE Id = ?";
     private final String SELECT_ALL= "SELECT * FROM CLASS ";

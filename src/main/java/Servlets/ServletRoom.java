@@ -31,9 +31,9 @@ public class ServletRoom extends HttpServlet {
         ServiceSchedule serviceSchedule = new ServiceSchedule();
 
         String forward;
-        String roomNumber = request.getParameter(ROOM_NUMBER_PARAMETER);
+        String roomNumber = request.getParameter(ROOM_NUMBER_PARAMETER).toLowerCase();
         try {
-            List<Lesson> lessons = serviceSchedule.selectByNumberGroup(roomNumber);
+            List<Lesson> lessons = serviceSchedule.selectByRoom(roomNumber);
 
             if (lessons.size() == 0) {
                 request.setAttribute("errorMessage",

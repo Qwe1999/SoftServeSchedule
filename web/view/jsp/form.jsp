@@ -43,6 +43,12 @@
             <button id="showSubject" class="btn btn-sm btn-primary">Show subject's lessons</button>
             </dd>
 
+            <dt>All lessons</dt>
+            <dd id="last">
+                <button id="showLessons" class="btn btn-sm btn-primary">Show all lessons</button>
+                <p></p>
+            </dd>
+
 
         </dl>
     </div>

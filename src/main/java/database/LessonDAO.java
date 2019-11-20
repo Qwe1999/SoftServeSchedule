@@ -15,12 +15,12 @@ public class LessonDAO implements JdbcDAO<Lesson>{
 
     private static final String CREATE_TABLE = "CREATE TABLE schedule" +
             "(Id SERIAL PRIMARY KEY," +
-            " TeacherId INTEGER, " +
-            " SubjectId INTEGER, " +
-            " NumberLesson INTEGER, " +
-            " DayLesson CHARACTER  VARYING(20), " +
-            " ClassId INTEGER, " +
-            " RoomId INTEGER," +
+            " TeacherId INTEGER NOT NULL, " +
+            " SubjectId INTEGER NOT NULL,  " +
+            " NumberLesson INTEGER NOT NULL, " +
+            " DayLesson CHARACTER  VARYING(20) NOT NULL, " +
+            " ClassId INTEGER NOT NULL, " +
+            " RoomId INTEGER NOT NULL," +
             "UNIQUE(ClassId, NumberLesson,DayLesson), " +
             "UNIQUE(RoomId, NumberLesson,DayLesson), " +
             "UNIQUE(TeacherId, NumberLesson,DayLesson), " +
@@ -120,7 +120,7 @@ public class LessonDAO implements JdbcDAO<Lesson>{
             " JOIN room ON room.id = schedule.roomid" +
             " JOIN subject ON subject.id = schedule.subjectid" +
             " JOIN teacher ON teacher.id = schedule.teacherid" +
-            " WHERE subject.name = ?";
+            " WHERE room.number = ?";
 
     private static final String SELECT_BY_TEACHER = "SELECT " +
             " schedule.id as scheduleId, schedule.dayLesson as DayLesson, " +
@@ -266,9 +266,9 @@ public class LessonDAO implements JdbcDAO<Lesson>{
 
     }
 
-    public Optional<List<Lesson>> selectByNameRoom(String number) throws SQLException {
+    public Optional<List<Lesson>> selectByNumberRoom(String number) throws SQLException {
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(SELECT_BY_SUBJECT)) {
+                    DBConnection.getPreparedStatement(SELECT_BY_ROOM)) {
 
             statement.setString(1, number);
 

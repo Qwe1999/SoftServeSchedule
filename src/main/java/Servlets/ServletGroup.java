@@ -73,7 +73,8 @@ public class ServletGroup extends HttpServlet {
         try {
             ServiceSchedule serviceSchedule = new ServiceSchedule() ;
 
-            String groupnumber = request.getParameter(GROUP_NUMBER_PARAMETER);
+            String groupnumber = request.getParameter(GROUP_NUMBER_PARAMETER)
+                    .toLowerCase();
             serviceSchedule.insertGroup(new Group(groupnumber));
 
         } catch (SQLException e) {

@@ -19,3 +19,8 @@ $(document).on("click", "#showTeacher", function () {
         "http://localhost:8082/unnamed4/ServletTeacher?firstName=" + $('#teacherFirstName').val()
                     + "&lastName=" + $('#teacherLastName').val() ;
 });
+
+$(document).on("click", "#showLessons", function () {
+    location.href =
+        "http://localhost:8082/unnamed4/ServletLessons";
+});

@@ -15,7 +15,7 @@ public class TeacherDAO implements JdbcDAO<Teacher>{
 
     private final String INSERT = "INSERT INTO teacher(FirstName,LastName) VALUES (?,?) RETURNING id";
     private final String CREATE_TABLE = "CREATE TABLE teacher(Id SERIAL PRIMARY KEY,"+
-                "FirstName CHARACTER VARYING(30),LastName CHARACTER VARYING(30)," +
+                "FirstName CHARACTER VARYING(30) NOT NULL ,LastName CHARACTER VARYING(30) NOT NULL," +
                 "UNIQUE(FirstName, LastName) );";
     private final String SELECT_BY_NAME = "SELECT * FROM Teacher WHERE FirstName = ? AND LastName = ?";
     private final String SELECT_BY_ID = "SELECT * FROM Teacher WHERE Id = ?";

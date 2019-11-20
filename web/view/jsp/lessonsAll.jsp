@@ -32,8 +32,7 @@
             <tr>
                 <td id="tdNumber" width="10">${numberLesson.number}</td>
                 <c:forEach items="${days}" var="dayLesson">
-                    <c:if test="${schedule[numberLesson][dayLesson] != null and
-                        schedule[numberLesson][dayLessin].group.number == group.number}">
+                    <c:if test="${schedule[numberLesson][dayLesson].group.number == group.number}">
                         <td>
                             <p>Subject - ${schedule[numberLesson][dayLesson].subject.name}</p>
                             <p>
