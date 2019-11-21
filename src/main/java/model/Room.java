@@ -26,21 +26,23 @@ public class Room {
         return id;
     }
 
-    public void setId(int id) {
+    public Room setId(int id) {
         this.id = id;
+        return this;
     }
 
     public String getNumber() {
         return number;
     }
 
-    public void setNumber(String number) throws RoomException{
+    public Room setNumber(String number) throws RoomException{
         if(number!= null & !number.isEmpty()) {
             this.number = number;
         }
         else {
             throw new RoomException("Number is null or empty");
         }
+        return this;
     }
 
     @Override

@@ -13,7 +13,7 @@ public class ServiceLesson {
     private List<Lesson> lessons = new ArrayList<>();
 
 
-    public void addLesson(Lesson lessonLesson) throws ScheduleServiceException {
+    public void addLesson(Lesson lessonLesson) {
 
         for (Lesson i : lessons) {
             if (lessonLesson.getDayLesson().equals(i.getDayLesson()) &&

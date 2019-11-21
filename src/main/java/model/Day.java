@@ -1,10 +1,10 @@
 package model;
 
 public enum Day{
-    Monday,
-    Tuesday,
-    Wednesday,
-    Thursday,
-    Friday,
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
 
 }

@@ -14,13 +14,13 @@ public class ServiceSchedule {
     TeacherDAO teacherDAO;
     LessonDAO lessonDAO;
 
-    public ServiceSchedule() {
+    public ServiceSchedule() throws SQLException {
 
-        groupDAO = new GroupDAO();
-        roomDAO = new RoomDAO();
-        subjectDAO = new SubjectDAO();
-        teacherDAO = new TeacherDAO();
-        lessonDAO = new LessonDAO();
+        groupDAO = new GroupDAO(DBConnection.getConnection());
+        roomDAO = new RoomDAO(DBConnection.getConnection());
+        subjectDAO = new SubjectDAO(DBConnection.getConnection());
+        teacherDAO = new TeacherDAO(DBConnection.getConnection());
+        lessonDAO = new LessonDAO(DBConnection.getConnection());
     }
 
 
@@ -178,7 +178,7 @@ public class ServiceSchedule {
         Map<NumberLesson, Map<Day, Lesson>> schedule =
                 new EnumMap<>(NumberLesson.class);
             for (Lesson lesson : lessons) {
-                Map<Day, Lesson> scheduleValue = new EnumMap<Day, Lesson>(Day.class);
+                Map<Day, Lesson> scheduleValue = new EnumMap<>(Day.class);
                 scheduleValue.put(lesson.getDayLesson(), lesson);
                 schedule.put(lesson.getNumberLesson(), scheduleValue);
             }

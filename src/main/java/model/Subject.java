@@ -21,8 +21,9 @@ public class Subject {
         return id;
     }
 
-    public void setId(int id) {
+    public Subject setId(int id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {

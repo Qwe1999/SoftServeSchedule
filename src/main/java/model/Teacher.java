@@ -26,34 +26,38 @@ public class Teacher {
         return id;
     }
 
-    public void setId(int id) {
+    public Teacher setId(int id) {
         this.id = id;
+        return this;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) throws TeacherException {
+    public Teacher setFirstName(String firstName) throws TeacherException {
         if(firstName != null & !firstName.isEmpty()) {
             this.firstName = firstName;
         }
         else {
             throw new TeacherException("First Name is null or empty");
         }
+        return this;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) throws TeacherException{
+    public Teacher setLastName(String lastName) throws TeacherException{
         if(lastName != null & !lastName.isEmpty()) {
             this.lastName = lastName;
         }
         else {
             throw new TeacherException("Last Name is null or empty");
         }
+
+        return this;
     }
 
 

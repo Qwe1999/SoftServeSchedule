@@ -37,14 +37,13 @@ public class Main {
         service.ServiceJson serviceJson = new service.ServiceJson();
 
         try (Connection connection = DBConnection.getConnection()){
-            GroupDAO groupDAO = new GroupDAO();
-            RoomDAO roomDAO =  new RoomDAO();
-            SubjectDAO subjectDAO =  new SubjectDAO();
-            TeacherDAO teacherDAO =  new TeacherDAO();
-            LessonDAO lessonDAO =  new LessonDAO();
+            GroupDAO groupDAO = new GroupDAO(DBConnection.getConnection());
+            RoomDAO roomDAO =  new RoomDAO(DBConnection.getConnection());
+            SubjectDAO subjectDAO =  new SubjectDAO(DBConnection.getConnection());
+            TeacherDAO teacherDAO =  new TeacherDAO(DBConnection.getConnection());
+            LessonDAO lessonDAO =  new LessonDAO(DBConnection.getConnection());
             List<String> strings = new ArrayList<>();
-            System.out.println(Day.valueOf("Monday"));
-
+            System.out.println(groupDAO.deleteById(10));
             /*scheduleDAO.dropTable();
             groupDAO.dropTable();
             roomDAO.dropTable();

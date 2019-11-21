@@ -28,14 +28,14 @@ public class ServletSubject extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        ServiceSchedule serviceSchedule = new ServiceSchedule();
 
         String forward;
         String subjectName = request.getParameter(SUBJECT_NAME_PARAMETER).toLowerCase();
         try {
+            ServiceSchedule serviceSchedule = new ServiceSchedule();
             List<Lesson> lessons = serviceSchedule.selectBySubject(subjectName);
 
-            if (lessons.size() == 0) {
+            if (lessons.isEmpty()) {
                 request.setAttribute("errorMessage",
                         "Subject with number " + subjectName + " don't have any lessons");
                 forward = ERROR_PAGE;
@@ -69,7 +69,7 @@ public class ServletSubject extends HttpServlet {
         try {
             ServiceSchedule serviceSchedule = new ServiceSchedule() ;
 
-            String subjectName = (String) request.getParameter(SUBJECT_NAME_PARAMETER);
+            String subjectName = request.getParameter(SUBJECT_NAME_PARAMETER);
             serviceSchedule.insertSubject(new Subject(subjectName));
 
         } catch (SQLException e) {
@@ -86,7 +86,7 @@ public class ServletSubject extends HttpServlet {
 
             ServiceSchedule serviceSchedule = new ServiceSchedule() ;
 
-            String subjectName = (String) request.getParameter(SUBJECT_NAME_PARAMETER);
+            String subjectName =  request.getParameter(SUBJECT_NAME_PARAMETER);
             serviceSchedule.deleteSubject(subjectName);
         } catch (SQLException e) {
             e.printStackTrace();

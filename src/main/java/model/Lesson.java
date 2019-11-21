@@ -29,48 +29,54 @@ public class Lesson {
         return group;
     }
 
-    public void setGroup(Group group) {
+    public Lesson setGroup(Group group) {
         this.group = group;
+        return this;
     }
 
     public Room getRoom() {
         return room;
     }
 
-    public void setRoom(Room room) {
+    public Lesson setRoom(Room room) {
         this.room = room;
+        return this;
     }
 
     public Teacher getTeacher() {
         return teacher;
     }
 
-    public void setTeacher(Teacher teacher) {
+    public Lesson setTeacher(Teacher teacher) {
         this.teacher = teacher;
+        return this;
     }
 
     public Subject getSubject() {
         return subject;
     }
 
-    public void setSubject(Subject subject) {
+    public Lesson setSubject(Subject subject) {
         this.subject = subject;
+        return this;
     }
 
     public NumberLesson getNumberLesson() {
         return numberLesson;
     }
 
-    public void setNumberLesson(NumberLesson numberLesson) {
+    public Lesson setNumberLesson(NumberLesson numberLesson) {
             this.numberLesson =numberLesson;
+            return this;
     }
 
     public Day getDayLesson() {
         return dayLesson;
     }
 
-    public void setDayLesson(Day dayLesson) {
+    public Lesson setDayLesson(Day dayLesson) {
             this.dayLesson = dayLesson;
+            return this;
     }
 
     @Override

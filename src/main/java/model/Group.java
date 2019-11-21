@@ -22,15 +22,16 @@ public class Group {
         return id;
     }
 
-    public void setId(int id) {
+    public Group setId(int id) {
         this.id = id;
+        return this;
     }
 
     public String getNumber() {
         return number;
     }
 
-    public void setNumber(String number) throws GroupException {
+    public void setNumber(String number) {
         if(number == null & number.isEmpty()) {
             throw new GroupException("number is empty or null");
         }

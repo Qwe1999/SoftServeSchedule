@@ -29,17 +29,15 @@ public class ServletTeacher extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        ServiceSchedule serviceSchedule = new ServiceSchedule();
-
         String forward;
         String firstName = request.getParameter(FIRST_NAME_PARAMETER).toLowerCase();
         String lastName =request.getParameter(LAST_NAME_PARAMETER).toLowerCase();
-        System.out.println(firstName);
-        System.out.println(lastName);
+
         try {
+            ServiceSchedule serviceSchedule = new ServiceSchedule();
             List<Lesson> lessons = serviceSchedule.selectByTeacherName(firstName,lastName);
 
-            if (lessons.size() == 0) {
+            if (lessons.isEmpty()) {
                 request.setAttribute("errorMessage",
                          firstName + " " + lastName + " don't have any lessons");
                 forward = ERROR_PAGE;

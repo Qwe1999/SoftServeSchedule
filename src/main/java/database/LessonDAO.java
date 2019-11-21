@@ -1,6 +1,5 @@
 package database;
 
-import exceptions.RoomException;
 import model.*;
 
 import java.sql.Connection;
@@ -32,22 +31,10 @@ public class LessonDAO implements JdbcDAO<Lesson>{
 
     private static final String INSERT = "INSERT INTO schedule(" +
             "NumberLesson,DayLesson,ClassId,RoomId,TeacherId,SubjectId) " +
-            "VALUES (?,?,?,?,?,?) RETURNING id";
+            "VALUES (?,UPPER(?),?," +
+            "?,?,?) RETURNING id";
 
-    private static final String SELECT_BY_DAY = "SELECT  " +
-            " schedule.id as scheduleId, schedule.dayLesson as DayLesson, " +
-            " schedule.numberLesson as NumberLesson, " +
-            " class.id as classId, class.number as classNumber, " +
-            " room.id as roomId, room.number as roomNumber, " +
-            " subject.id as subjectId, subject.name as subjectName, "+
-            " teacher.id as teacherId, teacher.firstName as FirstName, " +
-            " teacher.lastName as LastName "+
-            " from schedule " +
-            " JOIN class ON class.id = schedule.classid" +
-            " JOIN room ON room.id = schedule.roomid" +
-            " JOIN subject ON subject.id = schedule.subjectid" +
-            " JOIN teacher ON teacher.id = schedule.teacherid" +
-            " WHERE classNumber = ? AND dayLesson = ?";
+
     private static final String SELECT_BY_ID = "SELECT " +
             " schedule.id as scheduleId, schedule.dayLesson as DayLesson, " +
             " schedule.numberLesson as NumberLesson, " +
@@ -61,7 +48,7 @@ public class LessonDAO implements JdbcDAO<Lesson>{
             " JOIN room ON room.id = schedule.roomid" +
             " JOIN subject ON subject.id = schedule.subjectid" +
             " JOIN teacher ON teacher.id = schedule.teacherid" +
-            " WHERE scheduleId = ?";
+            " WHERE schedule.Id = ?";
 
     private static final String SELECT_ALL = "SELECT " +
             " schedule.id as scheduleId, schedule.dayLesson as DayLesson, " +
@@ -90,7 +77,7 @@ public class LessonDAO implements JdbcDAO<Lesson>{
             " JOIN room ON room.id = schedule.roomid" +
             " JOIN subject ON subject.id = schedule.subjectid" +
             " JOIN teacher ON teacher.id = schedule.teacherid" +
-            " WHERE class.number = ?";
+            " WHERE LOWER(class.number) = LOWER(?)";
 
     private static final String SELECT_BY_SUBJECT = "SELECT " +
             " schedule.id as scheduleId, schedule.dayLesson as DayLesson, " +
@@ -105,7 +92,7 @@ public class LessonDAO implements JdbcDAO<Lesson>{
             " JOIN room ON room.id = schedule.roomid" +
             " JOIN subject ON subject.id = schedule.subjectid" +
             " JOIN teacher ON teacher.id = schedule.teacherid" +
-            " WHERE subject.name = ?";
+            " WHERE LOWER(subject.name) = LOWER(?)";
 
     private static final String SELECT_BY_ROOM = "SELECT " +
             " schedule.id as scheduleId, schedule.dayLesson as DayLesson, " +
@@ -120,7 +107,7 @@ public class LessonDAO implements JdbcDAO<Lesson>{
             " JOIN room ON room.id = schedule.roomid" +
             " JOIN subject ON subject.id = schedule.subjectid" +
             " JOIN teacher ON teacher.id = schedule.teacherid" +
-            " WHERE room.number = ?";
+            " WHERE LOWER(room.number) = LOWER(?)";
 
     private static final String SELECT_BY_TEACHER = "SELECT " +
             " schedule.id as scheduleId, schedule.dayLesson as DayLesson, " +
@@ -135,15 +122,26 @@ public class LessonDAO implements JdbcDAO<Lesson>{
             " JOIN class ON class.id = schedule.classid" +
             " JOIN subject ON subject.id = schedule.subjectid" +
             " JOIN teacher ON teacher.id = schedule.teacherid" +
-            " WHERE teacher.firstName = ? and teacher.lastName = ?";
+            " WHERE LOWER(teacher.firstName) = LOWER(?) " +
+            " and LOWER(teacher.lastName) = LOWER(?)";
 
     private static final String DELETE_BY_ID = "DELETE FROM SCHEDULE WHERE id = ? ";
     private static final String DROP_TABLE = "DROP TABLE SCHEDULE";
+    private static Connection connection;
 
+    public LessonDAO(Connection connection) throws SQLException {
+        this.connection = connection;
+    }
 
+    public static Connection getConnection() {
+        return connection;
+    }
 
+    public static void setConnection(Connection connection) {
+        LessonDAO.connection = connection;
+    }
 
-    public List<Lesson> parseResultSet(ResultSet rs) throws SQLException {
+    private List<Lesson> parseResultSet(ResultSet rs) throws SQLException {
         List<Lesson> lesson = new ArrayList<>();
         while (rs.next()) {
             Lesson lessonLesson = new Lesson();
@@ -181,16 +179,15 @@ public class LessonDAO implements JdbcDAO<Lesson>{
     public void create() throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(CREATE_TABLE)){
+                    connection.prepareStatement(CREATE_TABLE)){
             statement.execute();
         }
     }
 
     public int insert(Lesson lesson) throws SQLException {
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(INSERT)) {
+                    connection.prepareStatement(INSERT)) {
 
-            int id;
             statement.setInt(1, lesson.getNumberLesson().getNumber());
             statement.setString(2, lesson.getDayLesson().name());
             statement.setInt(3, lesson.getGroup().getId());
@@ -211,7 +208,7 @@ public class LessonDAO implements JdbcDAO<Lesson>{
             throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(SELECT_BY_TEACHER)) {
+                    connection.prepareStatement(SELECT_BY_TEACHER)) {
 
             statement.setString(1, firstName);
             statement.setString(2, lastName);
@@ -219,7 +216,7 @@ public class LessonDAO implements JdbcDAO<Lesson>{
             ResultSet rs = statement.executeQuery();
 
             List<Lesson> lessons = parseResultSet(rs);
-            if (lessons.size() == 0){
+            if (lessons.isEmpty()){
                 return Optional.empty();
             }
                 return Optional.of(lessons);
@@ -230,14 +227,14 @@ public class LessonDAO implements JdbcDAO<Lesson>{
 
     public Optional<List<Lesson>> selectByNumberGroup(String numberGroup) throws SQLException {
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(SELECT_BY_GROUP)) {
+                    connection.prepareStatement(SELECT_BY_GROUP)) {
 
             statement.setString(1, numberGroup);
 
             ResultSet rs = statement.executeQuery();
 
             List<Lesson> lessons = parseResultSet(rs);
-            if (lessons.size() == 0){
+            if (lessons.isEmpty()){
                 return Optional.empty();
             }
             else {
@@ -249,14 +246,14 @@ public class LessonDAO implements JdbcDAO<Lesson>{
 
     public Optional<List<Lesson>> selectByNameSubject(String subject) throws SQLException {
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(SELECT_BY_SUBJECT)) {
+                    connection.prepareStatement(SELECT_BY_SUBJECT)) {
 
             statement.setString(1, subject);
 
             ResultSet rs = statement.executeQuery();
 
             List<Lesson> lessons = parseResultSet(rs);
-            if (lessons.size() == 0){
+            if (lessons.isEmpty()){
                 return Optional.empty();
             }
             else {
@@ -268,14 +265,14 @@ public class LessonDAO implements JdbcDAO<Lesson>{
 
     public Optional<List<Lesson>> selectByNumberRoom(String number) throws SQLException {
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(SELECT_BY_ROOM)) {
+                    connection.prepareStatement(SELECT_BY_ROOM)) {
 
             statement.setString(1, number);
 
             ResultSet rs = statement.executeQuery();
 
             List<Lesson> lessons = parseResultSet(rs);
-            if (lessons.size() == 0){
+            if (lessons.isEmpty()){
                 return Optional.empty();
             }
             else {
@@ -288,13 +285,13 @@ public class LessonDAO implements JdbcDAO<Lesson>{
     public Optional<Lesson> selectById(int id) throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(SELECT_BY_ID)) {
+                    connection.prepareStatement(SELECT_BY_ID)) {
 
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
 
             List<Lesson> lessons = parseResultSet(rs);
-            if (lessons.size() == 0){
+            if (lessons.isEmpty()){
                 return Optional.empty();
             }
             else {
@@ -303,15 +300,15 @@ public class LessonDAO implements JdbcDAO<Lesson>{
         }
     }
 
-    public Optional<List<Lesson>> selectAll() throws SQLException, RoomException {
+    public Optional<List<Lesson>> selectAll() throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(SELECT_ALL)){
+                    connection.prepareStatement(SELECT_ALL)){
 
             ResultSet rs = statement.executeQuery();
 
             List<Lesson> lessons = parseResultSet(rs);
-            if (lessons.size() == 0){
+            if (lessons.isEmpty()){
                 return Optional.empty();
             }
             else {
@@ -321,21 +318,22 @@ public class LessonDAO implements JdbcDAO<Lesson>{
 
     }
 
-    public void deleteById(int id) throws SQLException {
+    public boolean deleteById(int id) throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(DELETE_BY_ID)) {
+                    connection.prepareStatement(DELETE_BY_ID)) {
 
             statement.setInt(1, id);
-            statement.execute();
+            return statement.executeUpdate() != 0;
+
         }
     }
 
-    public void dropTable() throws SQLException {
+    public boolean dropTable() throws SQLException {
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(DELETE_BY_ID)) {
+                    connection.prepareStatement(DROP_TABLE)) {
 
-            statement.execute();
+            return statement.executeUpdate() != 0;
         }
     }
 }

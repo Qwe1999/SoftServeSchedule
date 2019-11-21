@@ -1,6 +1,5 @@
 package exceptions;
 
-import model.Teacher;
 
 public class TeacherException extends ModelException{
     private String message;

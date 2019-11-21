@@ -5,7 +5,6 @@ import model.Lesson;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,8 +14,7 @@ public class ServiceJson {
         ObjectMapper mapper = new ObjectMapper();
 
         Lesson[] obj = mapper.readValue(new File(path), Lesson[].class);
-        ArrayList<Lesson> arrayList = new ArrayList<Lesson>(Arrays.asList(obj));
-        return arrayList;
+        return Arrays.asList(obj);
     }
 
     public void write(List<Lesson> arrayLesson, String path) {

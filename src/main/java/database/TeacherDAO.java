@@ -1,6 +1,5 @@
 package database;
 
-import exceptions.TeacherException;
 import model.Teacher;
 
 import java.sql.Connection;
@@ -13,20 +12,33 @@ import java.util.Optional;
 
 public class TeacherDAO implements JdbcDAO<Teacher>{
 
-    private final String INSERT = "INSERT INTO teacher(FirstName,LastName) VALUES (?,?) RETURNING id";
-    private final String CREATE_TABLE = "CREATE TABLE teacher(Id SERIAL PRIMARY KEY,"+
+    private static final String INSERT = "INSERT INTO teacher(FirstName,LastName) VALUES (?,?) RETURNING id";
+    private static final String CREATE_TABLE = "CREATE TABLE teacher(Id SERIAL PRIMARY KEY,"+
                 "FirstName CHARACTER VARYING(30) NOT NULL ,LastName CHARACTER VARYING(30) NOT NULL," +
                 "UNIQUE(FirstName, LastName) );";
-    private final String SELECT_BY_NAME = "SELECT * FROM Teacher WHERE FirstName = ? AND LastName = ?";
-    private final String SELECT_BY_ID = "SELECT * FROM Teacher WHERE Id = ?";
-    private final String SELECT_ALL= "SELECT * FROM TEACHER";
-    private final String DELETE_BY_NAME = "DELETE FROM TEACHER WHERE firstName = ? and lastName = ?";
-    private final String DELETE_BY_ID = "DELETE FROM TEACHER WHERE id = ?";
-    private final String DROP_TABLE = "DROP TABLE TEACHER ";
+    private static final String SELECT_BY_NAME = "SELECT * FROM Teacher WHERE " +
+            "LOWER(FirstName) = LOWER(?) AND LOWER(LastName) = LOWER(?)";
+    private static final String SELECT_BY_ID = "SELECT * FROM Teacher WHERE Id = ?";
+    private static final String SELECT_ALL= "SELECT * FROM TEACHER";
+    private static final String DELETE_BY_NAME = "DELETE FROM TEACHER WHERE " +
+            "LOWER(firstName) = LOWER(?) and LOWER(lastName) = LOWER(?)";
+    private static final String DELETE_BY_ID = "DELETE FROM TEACHER WHERE id = ?";
+    private static final String DROP_TABLE = "DROP TABLE TEACHER ";
+    private static Connection connection;
 
+    public TeacherDAO(Connection connection) throws SQLException {
+        this.connection = connection;
+    }
 
+    public static Connection getConnection() {
+        return connection;
+    }
 
-    public List<Teacher> parseResultSet(ResultSet rs) throws SQLException {
+    public static void setConnection(Connection connection) {
+        TeacherDAO.connection = connection;
+    }
+
+    private List<Teacher> parseResultSet(ResultSet rs) throws SQLException {
 
         List<Teacher> teachers = new ArrayList<>();
         while (rs.next()) {
@@ -42,7 +54,7 @@ public class TeacherDAO implements JdbcDAO<Teacher>{
     public void create() throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(CREATE_TABLE)) {
+                    connection.prepareStatement(CREATE_TABLE)) {
 
             statement.execute();
         }
@@ -51,7 +63,7 @@ public class TeacherDAO implements JdbcDAO<Teacher>{
     public int insert(Teacher teacher) throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(INSERT)) {
+                    connection.prepareStatement(INSERT)) {
 
             statement.setString(1, teacher.getFirstName());
             statement.setString(2, teacher.getLastName());
@@ -59,16 +71,15 @@ public class TeacherDAO implements JdbcDAO<Teacher>{
             rs.next();
             int id;
             id = rs.getInt(1);
-            statement.close();
             return id;
 
         }
     }
 
-    public Optional<Teacher> selectByName(String firstName, String lastName) throws SQLException,  TeacherException {
+    public Optional<Teacher> selectByName(String firstName, String lastName) throws SQLException{
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(SELECT_BY_NAME)) {
+                    connection.prepareStatement(SELECT_BY_NAME)) {
 
             statement.setString(1, firstName);
             statement.setString(2, lastName);
@@ -76,7 +87,7 @@ public class TeacherDAO implements JdbcDAO<Teacher>{
             ResultSet rs = statement.executeQuery();
 
             List<Teacher> teachers = parseResultSet(rs);
-            if (teachers.size() == 0){
+            if (teachers.isEmpty()){
                 return Optional.empty();
             }
             else {
@@ -85,16 +96,16 @@ public class TeacherDAO implements JdbcDAO<Teacher>{
         }
     }
 
-    public Optional<Teacher> selectById(int id) throws SQLException, TeacherException {
+    public Optional<Teacher> selectById(int id) throws SQLException{
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(SELECT_BY_ID)) {
+                    connection.prepareStatement(SELECT_BY_ID)) {
             statement.setInt(1, id);
 
             ResultSet rs = statement.executeQuery();
 
             List<Teacher> teachers = parseResultSet(rs);
-            if (teachers.size() == 0){
+            if (teachers.isEmpty()){
                 return Optional.empty();
             }
             else {
@@ -103,15 +114,15 @@ public class TeacherDAO implements JdbcDAO<Teacher>{
         }
     }
 
-    public Optional<List<Teacher>> selectAll() throws SQLException,  TeacherException {
+    public Optional<List<Teacher>> selectAll() throws SQLException{
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(SELECT_ALL)) {
+                    connection.prepareStatement(SELECT_ALL)) {
 
             ResultSet rs = statement.executeQuery();
 
             List<Teacher> teachers = parseResultSet(rs);
-            if (teachers.size() == 0){
+            if (teachers.isEmpty()){
                 return Optional.empty();
             }
             else {
@@ -120,31 +131,32 @@ public class TeacherDAO implements JdbcDAO<Teacher>{
         }
     }
 
-    public void deleteById(int id) throws SQLException {
+    public boolean deleteById(int id) throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(DELETE_BY_ID)) {
+                    connection.prepareStatement(DELETE_BY_ID)) {
 
             statement.setInt(1, id);
-            statement.execute();
+            return statement.executeUpdate() != 0 ;
+
         }
     }
 
-    public void deleteByName(String firstName, String lastName) throws SQLException {
+    public boolean deleteByName(String firstName, String lastName) throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(DELETE_BY_NAME)) {
+                    connection.prepareStatement(DELETE_BY_NAME)) {
 
             statement.setString(1, firstName);
             statement.setString(2, lastName);
-            statement.execute();
+            return statement.executeUpdate() != 0 ;
         }
     }
 
 
     public void dropTable() throws SQLException {
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(DROP_TABLE)) {
+                    connection.prepareStatement(DROP_TABLE)) {
             statement.execute();
         }
     }

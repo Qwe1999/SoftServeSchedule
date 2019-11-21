@@ -10,10 +10,9 @@ import java.io.IOException;
 
 @WebServlet("/ServletManager")
 public class ServletManager extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/view/jsp/manager.jsp");
         dispatcher.forward(request, response);

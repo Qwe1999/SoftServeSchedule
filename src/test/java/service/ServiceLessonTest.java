@@ -25,7 +25,7 @@ class ServiceLessonTest {
         List<Lesson> lessons = new ArrayList<>();
 
         Lesson lesson = new Lesson();
-        lesson.setDayLesson(Day.Thursday);
+        lesson.setDayLesson(Day.THURSDAY);
         lesson.setGroup(new Group("443"));
         lesson.setNumberLesson(NumberLesson.three);
         lesson.setSubject(new Subject("Programing"));
@@ -34,7 +34,7 @@ class ServiceLessonTest {
         lessons.add(lesson);
 
         lesson = new Lesson();
-        lesson.setDayLesson(Day.Friday);
+        lesson.setDayLesson(Day.FRIDAY);
         lesson.setGroup(new Group("123"));
         lesson.setNumberLesson(NumberLesson.eight);
         lesson.setSubject(new Subject("Math"));
@@ -43,7 +43,7 @@ class ServiceLessonTest {
         lessons.add(lesson);
 
         lesson = new Lesson();
-        lesson.setDayLesson(Day.Friday);
+        lesson.setDayLesson(Day.FRIDAY);
         lesson.setGroup(new Group("333"));
         lesson.setNumberLesson(NumberLesson.seven);
         lesson.setSubject(new Subject("Physics"));
@@ -52,7 +52,7 @@ class ServiceLessonTest {
         lessons.add(lesson);
 
         lesson = new Lesson();
-        lesson.setDayLesson(Day.Monday);
+        lesson.setDayLesson(Day.MONDAY);
         lesson.setGroup(new Group("111"));
         lesson.setNumberLesson(NumberLesson.one);
         lesson.setSubject(new Subject("Math"));
@@ -76,7 +76,7 @@ class ServiceLessonTest {
 
     static Stream<Lesson> addLesson() {
         Lesson lesson = new Lesson();
-        lesson.setDayLesson(Day.Friday);
+        lesson.setDayLesson(Day.FRIDAY);
         lesson.setGroup(new Group("131"));
         lesson.setNumberLesson(NumberLesson.one);
         lesson.setSubject(new Subject("Math"));
@@ -99,7 +99,7 @@ class ServiceLessonTest {
 
     static Stream<Lesson> addLessonBusy() {
         Lesson lesson = new Lesson();
-        lesson.setDayLesson(Day.Monday);
+        lesson.setDayLesson(Day.MONDAY);
         lesson.setGroup(new Group("111"));
         lesson.setNumberLesson(NumberLesson.one);
         lesson.setSubject(new Subject("Math"));
@@ -121,7 +121,7 @@ class ServiceLessonTest {
 
     static Stream<Arguments> getByGroup() {
         Lesson lesson = new Lesson();
-        lesson.setDayLesson(Day.Monday);
+        lesson.setDayLesson(Day.MONDAY);
         lesson.setGroup(new Group("111"));
         lesson.setNumberLesson(NumberLesson.one);
         lesson.setSubject(new Subject("Math"));
@@ -145,7 +145,7 @@ class ServiceLessonTest {
 
     static Stream<Arguments> getByDay() {
         Lesson lesson = new Lesson();
-        lesson.setDayLesson(Day.Monday);
+        lesson.setDayLesson(Day.MONDAY);
         lesson.setGroup(new Group("111"));
         lesson.setNumberLesson(NumberLesson.one);
         lesson.setSubject(new Subject("Math"));
@@ -153,7 +153,7 @@ class ServiceLessonTest {
         lesson.setRoom(new Room("111"));
 
         return Stream.of(
-                arguments(Arrays.asList(lesson),Day.Monday)
+                arguments(Arrays.asList(lesson),Day.MONDAY)
         );
     }
 
@@ -168,7 +168,7 @@ class ServiceLessonTest {
 
     static Stream<Arguments> getByTeacher() {
         Lesson lesson = new Lesson();
-        lesson.setDayLesson(Day.Monday);
+        lesson.setDayLesson(Day.MONDAY);
         lesson.setGroup(new Group("111"));
         lesson.setNumberLesson(NumberLesson.one);
         lesson.setSubject(new Subject("Math"));
@@ -191,7 +191,7 @@ class ServiceLessonTest {
 
     static Stream<Arguments> getByDayGroup() {
         Lesson lesson = new Lesson();
-        lesson.setDayLesson(Day.Monday);
+        lesson.setDayLesson(Day.MONDAY);
         lesson.setGroup(new Group("111"));
         lesson.setNumberLesson(NumberLesson.one);
         lesson.setSubject(new Subject("Math"));
@@ -199,7 +199,7 @@ class ServiceLessonTest {
         lesson.setRoom(new Room("111"));
 
         return Stream.of(
-                arguments(Arrays.asList(lesson),Day.Monday,new Group("111"))
+                arguments(Arrays.asList(lesson),Day.MONDAY,new Group("111"))
         );
     }
 

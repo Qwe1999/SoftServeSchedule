@@ -1,6 +1,5 @@
 package database;
 
-import exceptions.RoomException;
 import model.Room;
 
 import java.sql.*;
@@ -14,17 +13,29 @@ public class RoomDAO implements JdbcDAO<Room>{
 
     private static final String CREATE_TABLE = "CREATE TABLE room(Id SERIAL PRIMARY KEY," +
             "                               Number CHARACTER VARYING(20) NOT NULL UNIQUE);";
-    private static final String INSERT = "INSERT INTO room(number) VALUES (?) RETURNING id";
-    private static final String SELECT_BY_NUMBER = "SELECT * FROM CLASS WHERE Number = ?";
-    private static final String SELECT_BY_ID = "SELECT * FROM NUMBER WHERE Id = ?";
+    private static final String INSERT = "INSERT INTO room(number) VALUES (LOWER(?)) RETURNING id";
+    private static final String SELECT_BY_NUMBER = "SELECT * FROM ROOM WHERE LOWER(Number) = LOWER(?)";
+    private static final String SELECT_BY_ID = "SELECT * FROM ROOM WHERE Id = ?";
     private static final String SELECT_ALL = "SELECT * FROM ROOM";
     private static final String DELETE_BY_ID = "DELETE FROM ROOM WHERE id = ?";
-    private static final String DELETE_BY_NUMBER = "DELETE FROM ROOM WHERE number = ?";
+    private static final String DELETE_BY_NUMBER = "DELETE FROM ROOM WHERE " +
+            "LOWER(number) = LOWER(?)";
     private static final String DROP_TABLE = "DROP TABLE ROOM";
+    private static Connection connection;
 
+    public RoomDAO(Connection connection) throws SQLException {
+        this.connection = connection;
+    }
 
+    public static Connection getConnection() {
+        return connection;
+    }
 
-    public List<Room> parseResultSet(ResultSet rs) throws SQLException {
+    public static void setConnection(Connection connection) {
+        RoomDAO.connection = connection;
+    }
+
+    private List<Room> parseResultSet(ResultSet rs) throws SQLException {
         List<Room> rooms = new ArrayList<>();
 
         while (rs.next()) {
@@ -39,7 +50,7 @@ public class RoomDAO implements JdbcDAO<Room>{
 
     public void create() throws SQLException {
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(CREATE_TABLE)) {
+                    connection.prepareStatement(CREATE_TABLE)) {
             statement.execute();
         }
     }
@@ -47,7 +58,7 @@ public class RoomDAO implements JdbcDAO<Room>{
     public int insert(Room room) throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(INSERT)) {
+                    connection.prepareStatement(INSERT)) {
 
             statement.setString(1, room.getNumber());
             ResultSet rs = statement.executeQuery();
@@ -59,17 +70,17 @@ public class RoomDAO implements JdbcDAO<Room>{
 
     }
 
-    public Optional<Room> selectByNumber(String number) throws SQLException,  RoomException {
+    public Optional<Room> selectByNumber(String number) throws SQLException{
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(SELECT_BY_NUMBER)) {
+                    connection.prepareStatement(SELECT_BY_NUMBER)) {
 
             statement.setString(1, number);
 
             ResultSet rs = statement.executeQuery();
 
             List<Room> rooms = parseResultSet(rs);
-            if (rooms.size() == 0){
+            if (rooms.isEmpty()){
                 return Optional.empty();
             }
             else {
@@ -78,16 +89,16 @@ public class RoomDAO implements JdbcDAO<Room>{
         }
     }
 
-    public Optional<Room> selectById(int id) throws SQLException, RoomException {
+    public Optional<Room> selectById(int id) throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(SELECT_BY_ID)) {
+                    connection.prepareStatement(SELECT_BY_ID)) {
             statement.setInt(1, id);
 
             ResultSet rs = statement.executeQuery();
 
             List<Room> rooms = parseResultSet(rs);
-            if (rooms.size() == 0){
+            if (rooms.isEmpty()){
                 return Optional.empty();
             }
             else {
@@ -97,15 +108,15 @@ public class RoomDAO implements JdbcDAO<Room>{
 
     }
 
-    public Optional<List<Room>> selectAll() throws SQLException, RoomException {
+    public Optional<List<Room>> selectAll() throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(SELECT_ALL)) {
+                    connection.prepareStatement(SELECT_ALL)) {
 
             ResultSet rs = statement.executeQuery();
 
             List<Room> rooms = parseResultSet(rs);
-            if (rooms.size() == 0){
+            if (rooms.isEmpty()){
                 return Optional.empty();
             }
             else {
@@ -114,30 +125,31 @@ public class RoomDAO implements JdbcDAO<Room>{
         }
     }
 
-    public void deleteById(int id) throws SQLException {
+    public boolean deleteById(int id) throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(DELETE_BY_ID)) {
+                    connection.prepareStatement(DELETE_BY_ID)) {
             statement.setInt(1, id);
-            statement.execute();
+            return statement.executeUpdate() != 0;
+
         }
     }
 
-    public void deleteByNumber(String number) throws SQLException {
+    public boolean deleteByNumber(String number) throws SQLException {
 
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(DELETE_BY_NUMBER)) {
+                    connection.prepareStatement(DELETE_BY_NUMBER)) {
             statement.setString(1, number);
-            statement.execute();
+            return statement.executeUpdate() != 0;
         }
     }
 
 
-    public void dropTable() throws SQLException {
+    public boolean dropTable() throws SQLException {
         try(PreparedStatement statement =
-                    DBConnection.getPreparedStatement(DROP_TABLE)) {
+                    connection.prepareStatement(DROP_TABLE)) {
 
-            statement.execute();
+            return statement.executeUpdate() != 0;
         }
     }
 }

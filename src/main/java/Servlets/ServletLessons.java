@@ -1,7 +1,6 @@
 package Servlets;
 
 import database.DBConnection;
-import database.GroupDAO;
 import model.*;
 import service.ServiceSchedule;
 
@@ -13,10 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @WebServlet("/ServletLessons")
 public class ServletLessons extends HttpServlet {
@@ -34,13 +31,13 @@ public class ServletLessons extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServiceSchedule serviceSchedule = new ServiceSchedule();
 
         String forward;
         try {
+            ServiceSchedule serviceSchedule = new ServiceSchedule();
             List<Lesson> lessons = serviceSchedule.selectAll();
 
-            if (lessons.size() == 0) {
+            if (lessons.isEmpty()) {
                 request.setAttribute("errorMessage",
                         "Schedule don't have lessons");
                 forward = ERROR_PAGE;
@@ -48,8 +45,7 @@ public class ServletLessons extends HttpServlet {
                 Map<NumberLesson, Map<Day,Lesson>> schedule;
                 schedule = serviceSchedule.getMapSchedule(lessons);
                 List<Group> groups = serviceSchedule.selectAllGroup();
-                System.out.println(groups);
-                System.out.println(schedule.values());
+
                 request.setAttribute("groups",groups);
                 request.setAttribute("schedule", schedule);
                 request.setAttribute("numbers", NumberLesson.values());
@@ -81,9 +77,8 @@ public class ServletLessons extends HttpServlet {
             Teacher teacher = new Teacher();
             teacher.setFirstName(request.getParameter(TEACHER_FIRST_NAME_PARAM).toLowerCase());
             teacher.setLastName(request.getParameter(TEACHER_LAST_NAME_PARAM).toLowerCase());
-            String dayStr = request.getParameter(DAY_PARAM);
+            String dayStr = request.getParameter(DAY_PARAM).toUpperCase();
 
-            dayStr = dayStr.substring(0,1).toUpperCase() + dayStr.substring(1).toLowerCase();
             Day day = Day.valueOf(dayStr);
             NumberLesson numberLesson =
                     NumberLesson.getNumberLesson(

@@ -28,7 +28,7 @@ class ServiceJsonTest {
         ArrayList<Lesson> schedulesExpected= new ArrayList<>();
 
         Lesson lesson = new Lesson();
-        lesson.setDayLesson(Day.Friday);
+        lesson.setDayLesson(Day.FRIDAY);
         lesson.setGroup(new Group("123"));
         lesson.setNumberLesson(NumberLesson.eight);
         lesson.setSubject(new Subject("Math"));

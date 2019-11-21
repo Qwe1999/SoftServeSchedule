@@ -28,14 +28,14 @@ public class ServletRoom extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        ServiceSchedule serviceSchedule = new ServiceSchedule();
 
         String forward;
         String roomNumber = request.getParameter(ROOM_NUMBER_PARAMETER).toLowerCase();
         try {
+            ServiceSchedule serviceSchedule = new ServiceSchedule();
             List<Lesson> lessons = serviceSchedule.selectByRoom(roomNumber);
 
-            if (lessons.size() == 0) {
+            if (lessons.isEmpty()) {
                 request.setAttribute("errorMessage",
                         "Room with number " + roomNumber + " don't have any lessons");
                 forward = ERROR_PAGE;
