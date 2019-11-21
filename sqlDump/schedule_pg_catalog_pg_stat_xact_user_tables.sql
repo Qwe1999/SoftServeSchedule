@@ -1,5 +1,0 @@
-INSERT INTO pg_catalog.pg_stat_xact_user_tables (relid, schemaname, relname, seq_scan, seq_tup_read, idx_scan, idx_tup_fetch, n_tup_ins, n_tup_upd, n_tup_del, n_tup_hot_upd) VALUES (26672, 'public', 'room', 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO pg_catalog.pg_stat_xact_user_tables (relid, schemaname, relname, seq_scan, seq_tup_read, idx_scan, idx_tup_fetch, n_tup_ins, n_tup_upd, n_tup_del, n_tup_hot_upd) VALUES (26662, 'public', 'class', 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO pg_catalog.pg_stat_xact_user_tables (relid, schemaname, relname, seq_scan, seq_tup_read, idx_scan, idx_tup_fetch, n_tup_ins, n_tup_upd, n_tup_del, n_tup_hot_upd) VALUES (26692, 'public', 'teacher', 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO pg_catalog.pg_stat_xact_user_tables (relid, schemaname, relname, seq_scan, seq_tup_read, idx_scan, idx_tup_fetch, n_tup_ins, n_tup_upd, n_tup_del, n_tup_hot_upd) VALUES (26682, 'public', 'subject', 0, 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO pg_catalog.pg_stat_xact_user_tables (relid, schemaname, relname, seq_scan, seq_tup_read, idx_scan, idx_tup_fetch, n_tup_ins, n_tup_upd, n_tup_del, n_tup_hot_upd) VALUES (26702, 'public', 'schedule', 0, 0, 0, 0, 0, 0, 0, 0);

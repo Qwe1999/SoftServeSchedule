@@ -29,7 +29,7 @@ class LessonDAOTest {
     @BeforeAll
     static void createConnection() throws SQLException {
         connection = DriverManager.getConnection(
-                "jdbc:postgresql://localhost/scheduleTest?user=postgres&password=root");
+                "jdbc:postgresql://localhost/schedule222Test?user=postgres&password=root");
         connection.setAutoCommit(false);
         lessonDAO = new LessonDAO(connection);
     }

@@ -1,1 +1,0 @@
-INSERT INTO pg_catalog.pg_stat_bgwriter (checkpoints_timed, checkpoints_req, checkpoint_write_time, checkpoint_sync_time, buffers_checkpoint, buffers_clean, maxwritten_clean, buffers_backend, buffers_backend_fsync, buffers_alloc, stats_reset) VALUES (176, 2, 34068, 508, 342, 0, 0, 50, 0, 1989, '2019-11-20 06:39:12.708811');

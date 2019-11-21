@@ -16,20 +16,8 @@ public class DBConnection {
     }
 
     public static Connection getConnection() throws SQLException {
-//        try (FileInputStream fis =
-//                     new FileInputStream("src/main/resources/config.properties")) {
-//            Properties property = new Properties();
-//            property.load(fis);
-//            log.info("Call get connection");
-//            connection = DriverManager.getConnection(property.getProperty("db.url"));
-//            log.info("Got connection");
-//            return connection;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//   return null;
         connection = DriverManager.getConnection(
-                "jdbc:postgresql://localhost/schedule?user=postgres&password=root");
+                "jdbc:postgresql://localhost/schedule222?user=postgres&password=root");
         return connection;
     }
 

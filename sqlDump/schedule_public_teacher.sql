@@ -1,9 +1,0 @@
-INSERT INTO public.teacher (id, firstname, lastname) VALUES (1, 'Ivan', 'Kovlov');
-INSERT INTO public.teacher (id, firstname, lastname) VALUES (2, 'Ivani78o', 'Kovlov');
-INSERT INTO public.teacher (id, firstname, lastname) VALUES (3, 'qwewq', 'zxc');
-INSERT INTO public.teacher (id, firstname, lastname) VALUES (4, 'qwewq', 'ttre');
-INSERT INTO public.teacher (id, firstname, lastname) VALUES (5, 'dfs', 'tterwre');
-INSERT INTO public.teacher (id, firstname, lastname) VALUES (6, 'qqq', 'zzz');
-INSERT INTO public.teacher (id, firstname, lastname) VALUES (11, 'firstName', 'lastName');
-INSERT INTO public.teacher (id, firstname, lastname) VALUES (12, 'undefined', 'Kovlov');
-INSERT INTO public.teacher (id, firstname, lastname) VALUES (13, 'Idsf', 'Kovlov');
